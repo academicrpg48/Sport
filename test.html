@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="th"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ทดสอบการเชื่อมต่อ</title>
+<style>body{font-family:system-ui,"Sarabun",sans-serif;max-width:720px;margin:2rem auto;padding:0 1rem;line-height:1.6}
+.ok{color:#047857;font-weight:700}.bad{color:#b91c1c;font-weight:700}pre{background:#f3f4f6;padding:.7rem;border-radius:8px;white-space:pre-wrap;word-break:break-all}h1{font-size:1.3rem}</style></head>
+<body><h1>ทดสอบการเชื่อมต่อ Apps Script</h1><div id="out">กำลังทดสอบ…</div>
+<script src="config.js"></script>
+<script>
+(async function () {
+  var o = document.getElementById('out'), h = '', url = (window.APP_CONFIG || {}).apiUrl || '';
+  function add(t, c) { h += '<p class="' + (c || '') + '">' + t + '</p>'; o.innerHTML = h; }
+  add('URL ที่ตั้งไว้ใน config.js:'); h += '<pre>' + (url || '(ว่าง)') + '</pre>'; o.innerHTML = h;
+  if (!/^https:\/\/script\.google\.com\/macros\/s\/[^/]+\/exec$/.test(url)) { add('✗ รูปแบบ URL ไม่ถูกต้อง ต้องเป็น https://script.google.com/macros/s/…/exec (ไม่ใช่ลิงก์ /dev และไม่ใช่ลิงก์ของ Google Workspace ที่มี /a/macros/)', 'bad'); return; }
+  try {
+    var r = await fetch(url, { method: 'POST', redirect: 'follow', headers: { 'Content-Type': 'text/plain;charset=utf-8' }, body: JSON.stringify({ fn: 'getPublicBoard', args: [] }) });
+    add('HTTP ' + r.status + ' จาก ' + (r.url || '').split('?')[0].slice(0, 80));
+    var t = await r.text(), j = null; try { j = JSON.parse(t); } catch (e) {}
+    if (j && j.ok) add('✓ เชื่อมต่อสำเร็จ — ระบบ API ทำงานปกติ (ชื่อโรงเรียน: ' + ((j.value.settings || {}).schoolName || '?') + ')', 'ok');
+    else if (j) add('✗ เซิร์ฟเวอร์ตอบ: ' + (j.error || 'ไม่ทราบสาเหตุ') + ' — ถ้าเป็น "ไม่พบฟังก์ชัน" แปลว่า Code.gs ที่ deploy ยังเป็นเวอร์ชันเก่า', 'bad');
+    else add('✗ ได้คำตอบที่ไม่ใช่ JSON (มักเป็นหน้า HTML): <pre>' + t.slice(0, 300).replace(/</g, '&lt;') + '</pre>วิธีแก้: ตรวจว่า Code.gs มีฟังก์ชัน doPost และ deploy เวอร์ชันใหม่แล้ว', 'bad');
+  } catch (e) {
+    add('✗ ' + e.name + ': ' + e.message, 'bad');
+    try { await fetch(url, { mode: 'no-cors' }); add('ถึงเซิร์ฟเวอร์ Google ได้ แต่ถูกบล็อกเรื่องสิทธิ์/CORS → สาเหตุเกือบแน่นอน: การ Deploy ไม่ได้ตั้ง "ผู้มีสิทธิ์เข้าถึง = ทุกคน (Anyone)" หรือบัญชีเป็น Google Workspace ของโรงเรียนที่จำกัดไว้'); }
+    catch (e2) { add('เชื่อมต่อ script.google.com ไม่ได้เลย → ตรวจอินเทอร์เน็ต/ไฟร์วอลล์/ส่วนขยายบล็อกโฆษณา'); }
+  }
+})();
+</script></body></html>
