@@ -1069,12 +1069,28 @@ function getCertFont(ver) {
 function teamMembersMap_(events, students, entries) {
   const st = {}; students.forEach(s => { st[s.id] = s; });
   const teamEv = {}; events.forEach(e => { if (e.mode === 'team') teamEv[e.id] = true; });
-  const out = {};
+  const out = {}, hasEntry = {};
   entries.forEach(en => {
     if (!teamEv[en.eventId]) return;
+    hasEntry[en.eventId + '|' + en.colorId] = true;
     const s = st[en.studentId]; if (!s || !s.fullname) return;
     const key = en.eventId + '|' + en.colorId;
     (out[key] = out[key] || []).push({ n: String(s.fullname).replace(/[|]/g, ' ').trim(), k: s.classLevel ? s.classLevel + (s.room ? '/' + s.room : '') : '' });
+  });
+  // ทีมที่ไม่ได้ลงทะเบียนผู้เล่นไว้ → ใช้นักเรียนทุกคนของสีนั้นที่ตรงเพศและระดับชั้นของรายการ (ระดับตรงตัว ไม่รวมรุ่นเล็กที่ลงรุ่นใหญ่)
+  const evs = events.filter(e => e.mode === 'team');
+  students.forEach(s => {
+    if (!s.fullname || !s.colorId || String(s.active) === 'false') return;
+    const g = levelGroupOf_(s.classLevel);
+    evs.forEach(e => {
+      const key = e.id + '|' + s.colorId;
+      if (hasEntry[key]) return;
+      if (e.gender === 'ชาย' && s.gender !== 'ชาย') return;
+      if (e.gender === 'หญิง' && s.gender !== 'หญิง') return;
+      const lv = e.levelGroup;
+      if (lv && lv !== 'ทุกระดับ' && !(lv === 'ประถม' ? (g === 'ป.ต้น' || g === 'ป.ปลาย') : g === lv)) return;
+      (out[key] = out[key] || []).push({ n: String(s.fullname).replace(/[|]/g, ' ').trim(), k: s.classLevel ? s.classLevel + (s.room ? '/' + s.room : '') : '' });
+    });
   });
   Object.keys(out).forEach(k => { out[k].sort((a, b) => String(a.n).localeCompare(String(b.n), 'th')); });
   return out;

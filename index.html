@@ -1668,8 +1668,17 @@ function certSrc() {
 function certMembersOf(eid, cid) {
   var src = certSrc();
   if (src.staff) {
-    var sm = cmap(S.d.students), out = [];
-    S.d.entries.forEach(function (en) { if (en.eventId === eid && en.colorId === cid && sm[en.studentId] && sm[en.studentId].fullname) { var s = sm[en.studentId]; out.push({ n: String(s.fullname).replace(/[|]/g, ' ').trim(), k: s.classLevel ? s.classLevel + (s.room ? '/' + s.room : '') : '' }); } });
+    var sm = cmap(S.d.students), out = [], has = false, ev = S.d.events.filter(function (e) { return e.id === eid; })[0];
+    S.d.entries.forEach(function (en) { if (en.eventId === eid && en.colorId === cid) { has = true; if (sm[en.studentId] && sm[en.studentId].fullname) { var s = sm[en.studentId]; out.push({ n: String(s.fullname).replace(/[|]/g, ' ').trim(), k: s.classLevel ? s.classLevel + (s.room ? '/' + s.room : '') : '' }); } } });
+    if (!has && ev) { // ทีมที่ไม่ได้ลงทะเบียนผู้เล่น → นักเรียนทุกคนของสีนั้นที่ตรงเพศและระดับชั้นของรายการ
+      S.d.students.forEach(function (s) {
+        if (!s.fullname || s.colorId !== cid || String(s.active) === 'false') return;
+        if (ev.gender === 'ชาย' && s.gender !== 'ชาย') return; if (ev.gender === 'หญิง' && s.gender !== 'หญิง') return;
+        var g = levelOf(s.classLevel), lv = ev.levelGroup;
+        if (lv && lv !== 'ทุกระดับ' && !(lv === 'ประถม' ? (g === 'ป.ต้น' || g === 'ป.ปลาย') : g === lv)) return;
+        out.push({ n: String(s.fullname).replace(/[|]/g, ' ').trim(), k: s.classLevel ? s.classLevel + (s.room ? '/' + s.room : '') : '' });
+      });
+    }
     return out.sort(function (a, b) { return a.n.localeCompare(b.n, 'th'); });
   }
   return (S.pub.members || []).filter(function (m) { return m.e === eid && m.c === cid; }).map(function (m) { return { n: m.n, k: m.k }; });
@@ -2018,8 +2027,10 @@ async function certNoReset() {
   if (!(await confirmBox('ล้างเลขเกียรติบัตร', 'ลบเลขที่ที่ออกไปแล้วทั้งหมด และเริ่มรันจากเลขเริ่มต้นใหม่ เกียรติบัตรที่เคยพิมพ์ไปแล้วจะมีเลขไม่ตรงกับระบบ ยืนยันหรือไม่?', 'ล้างเลข', true))) return;
   try { await api('resetCertNumbers'); CERT_NOS = {}; toast('ล้างเลขที่แล้ว'); } catch (e) { if (cleanMsg(e) !== 'handled') toast(cleanMsg(e), 'err'); }
 }
+function certRefSrvOld() { return S.d && S.d.settings && S.d.settings.certTplRefVer === undefined; }
 function pickCertTpl(inp, kind) {
   var f = inp.files && inp.files[0]; inp.value = ''; if (!f) return;
+  if (kind === 'ref' && certRefSrvOld()) { toast('Code.gs ใน Apps Script ยังเป็นเวอร์ชันเก่า (ไม่รองรับแม่แบบกรรมการ) — วาง Code.gs ใหม่แล้ว Deploy เวอร์ชันใหม่ก่อนอัปโหลด', 'err'); return; }
   if (!/^image\/(png|jpeg|webp)$/.test(f.type)) { toast('รองรับเฉพาะไฟล์ PNG/JPG/WebP', 'err'); return; }
   var rd = new FileReader();
   rd.onload = function () {
@@ -2051,6 +2062,7 @@ var CERT_REF_FIELDS = [['noX', 'เลขที่: ตำแหน่งขว�
 function certRefTplBlock(s) {
   var has = !!s.certTplRefVer, L = certLay(true);
   return '<div class="mt2" style="border-top:1px dashed var(--line);padding-top:.9rem"><h3 class="mb1" style="font-size:1rem">แม่แบบเกียรติบัตรกรรมการ</h3>' +
+    (certRefSrvOld() ? '<div class="notice mb1">⚠️ Code.gs ใน Apps Script ยังเป็นเวอร์ชันเก่า จึงแยกแม่แบบกรรมการไม่ได้ (ถ้าอัปโหลดตอนนี้จะไปทับแม่แบบนักกีฬา) — วาง Code.gs ใหม่แล้ว Deploy เป็นเวอร์ชันใหม่ก่อน</div>' : '') +
     '<div class="hint mb1">อัปโหลดภาพแม่แบบสำหรับกรรมการโดยเฉพาะ (แนวนอน A4 สัดส่วน ๒๙๗×๒๑๐) แม่แบบนี้แยกจากแม่แบบเกียรติบัตรนักกีฬา ถ้าไม่อัปโหลด ระบบจะใช้แบบมาตรฐานของระบบ ฟอนต์และการพิมพ์เลขที่ใช้ค่าเดียวกับเกียรติบัตรนักกีฬา</div>' +
     '<div class="row mb2"><label class="btn btn-sm btn-primary" style="cursor:pointer">' + (has ? 'เปลี่ยนภาพแม่แบบกรรมการ' : 'อัปโหลดภาพแม่แบบกรรมการ') + '<input type="file" accept="image/png,image/jpeg,image/webp" class="hide" onchange="pickCertTpl(this,\'ref\')"></label>' +
     (has ? '<button class="btn btn-sm btn-danger" onclick="removeCertTpl(\'ref\')">ลบแม่แบบกรรมการ</button>' : '') + '</div>' +
