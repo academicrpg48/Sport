@@ -310,51 +310,7 @@ table.t tbody tr:hover{background:#F3FCF7}
 .hero .brand-wrap:hover img,.hero .brand-wrap:hover .brand-ico{transform:rotate(-6deg) scale(1.05)}
 @media (prefers-reduced-motion:reduce){.pub-body>*,#view>.card,#view>.top,#view>div>.card,.mcard{animation:none}.pub-body .card:hover,.nav a:hover{transform:none}html{scroll-behavior:auto}}
 
-/* ===== ปุ่มสลับธีม + โหมดมืด ===== */
-.theme-btn{position:fixed;right:14px;bottom:14px;z-index:1500;width:46px;height:46px;border-radius:50%;border:1px solid rgba(255,255,255,.5);background:rgba(255,255,255,.85);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);box-shadow:0 10px 24px -8px rgba(5,60,40,.5);font-size:1.25rem;cursor:pointer;transition:transform .2s}
-.theme-btn:hover{transform:scale(1.08) rotate(12deg)}
-html[data-theme=dark]{color-scheme:dark;--ink:#E2F0E9;--mut:#94A9A0;--line:#24413A;--bg:#07140F;--g50:#0D2A20;--g100:#12382B;--redbg:#3A1520}
-html[data-theme=dark] body{background-color:#07140F;background-image:radial-gradient(at 0% 0%,rgba(16,185,129,.16) 0,transparent 45%),radial-gradient(at 100% 0%,rgba(251,191,36,.08) 0,transparent 45%),radial-gradient(at 50% 100%,rgba(14,116,144,.12) 0,transparent 50%)}
-html[data-theme=dark] .theme-btn{background:rgba(15,38,30,.9);border-color:#24413A}
-html[data-theme=dark] .card,html[data-theme=dark] .stat{background-color:rgba(13,31,25,.82);border-color:#1E3A31;box-shadow:0 1px 0 rgba(255,255,255,.04) inset,0 18px 40px -22px rgba(0,0,0,.7)}
-html[data-theme=dark] .stat{background-image:none}
-html[data-theme=dark] .tabs{background:rgba(13,31,25,.85);border-color:#1E3A31}
-html[data-theme=dark] .tabs a:hover:not(.on){background:#12382B;color:#6EE7B7}
-html[data-theme=dark] .top h2,html[data-theme=dark] .card h3,html[data-theme=dark] .stat b,html[data-theme=dark] .pts{color:#6EE7B7}
-html[data-theme=dark] .btn{color:#CFE5DB}
-html[data-theme=dark] .btn:not(.btn-primary):not(.btn-sun):not(.btn-danger){background:rgba(17,40,32,.9);border-color:#24413A}
-html[data-theme=dark] .btn:not(.btn-primary):not(.btn-sun):not(.btn-danger):hover:not(:disabled){background:#163A2E;border-color:#34D399}
-html[data-theme=dark] .btn-primary,html[data-theme=dark] .btn-danger{color:#fff}
-html[data-theme=dark] .btn-sun{color:#78350F}
-html[data-theme=dark] .inp,html[data-theme=dark] select,html[data-theme=dark] textarea{background:#0B1F18;border-color:#24413A;color:#E2F0E9}
-html[data-theme=dark] .inp:focus{background:#0F2A21}
-html[data-theme=dark] table.t th{background:#0F2A21;color:#6EE7B7;border-bottom-color:#24413A}
-html[data-theme=dark] table.t td{border-bottom-color:#1A3229}
-html[data-theme=dark] table.t tbody tr:hover{background:#0F2A21}
-html[data-theme=dark] .chip{background:#12382B;color:#BFE9D5;border-color:#24413A}
-html[data-theme=dark] .chip.warn{background:#3B2F0B;color:#FCD34D}
-html[data-theme=dark] .chip.bad{background:#3A1520;color:#FDA4AF}
-html[data-theme=dark] .sb-row:hover{background:rgba(16,185,129,.1)}
-html[data-theme=dark] .sb-row:first-child{background:linear-gradient(90deg,rgba(253,224,71,.16),rgba(253,224,71,0) 70%)}
-html[data-theme=dark] .bar,html[data-theme=dark] .bar-bg{background:#14302A}
-html[data-theme=dark] .mcard{background:#0D1F19;color:var(--ink)}
-html[data-theme=dark] .mfoot{background:#0B1914;border-top-color:#24413A}
-html[data-theme=dark] .overlay{background:rgba(0,0,0,.62)}
-html[data-theme=dark] .notice{background:linear-gradient(100deg,#3B2F0B,#4A3A0E);color:#FDE68A}
-html[data-theme=dark] .rk:not(.r1):not(.r2):not(.r3){background:#12382B;color:#BFE9D5}
-html[data-theme=dark] .mut,html[data-theme=dark] .xs.mut{color:#94A9A0}
-html[data-theme=dark] hr{border-color:#24413A}
-
-html[data-theme=dark] .tw{background:rgba(11,25,20,.7);border-color:#24413A}
-html[data-theme=dark] .cchip,html[data-theme=dark] .evres,html[data-theme=dark] .pick label{background:#0F2A21;border-color:#24413A;color:#E2F0E9}
-html[data-theme=dark] .t tr:hover td{background:#0F2A21}
-html[data-theme=dark] .sb-row{border-top-color:#1A3229}
-html[data-theme=dark] .prog{background:#14302A}
-html[data-theme=dark] .evres header{background:#12382B;color:#6EE7B7}
-html[data-theme=dark] label,html[data-theme=dark] .lbl{color:#9FB8AD}
-html[data-theme=dark] .notice{margin-top:.8rem}
 /* print */
-@media print{.theme-btn{display:none!important}}
 #print-area{display:none}
 .pr{font-family:'TH SarabunPSK','TH Sarabun PSK','TH Sarabun New','Sarabun',sans-serif;font-size:15pt;line-height:1.25;color:#000}
 .pr h1{font-size:19pt;text-align:center;margin:0}.pr h2{font-size:16pt;text-align:center;margin:0 0 .5rem;font-weight:600}
@@ -722,32 +678,6 @@ function logoHtml(s, cls) {
   return s.logoUrl ? '<img src="' + esc(s.logoUrl) + '" alt="โลโก้" referrerpolicy="no-referrer" onerror="this.style.display=\'none\'">'
     : '<span class="brand-ico">' + icon('trophy').replace('<svg', '<svg width="24" height="24"') + '</span>';
 }
-/* โหมดมืด/สว่าง — จำค่าไว้ในเครื่อง ไม่กระทบเกียรติบัตรและการพิมพ์ */
-(function () {
-  function get() { try { return localStorage.getItem('rpg_theme'); } catch (e) { return null; } }
-  function apply(t) {
-    document.documentElement.setAttribute('data-theme', t);
-    var b = document.getElementById('themeBtn');
-    if (b) { b.textContent = t === 'dark' ? '☀️' : '🌙'; b.title = t === 'dark' ? 'โหมดสว่าง' : 'โหมดมืด'; }
-    var m = document.querySelector('meta[name="theme-color"]');
-    if (m) m.setAttribute('content', t === 'dark' ? '#04140E' : '#065F46');
-  }
-  var t0 = get() || (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
-  document.documentElement.setAttribute('data-theme', t0);
-  window.toggleTheme = function () {
-    var n = document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
-    try { localStorage.setItem('rpg_theme', n); } catch (e) {}
-    apply(n);
-  };
-  function mk() {
-    if (document.getElementById('themeBtn')) return;
-    var b = document.createElement('button');
-    b.id = 'themeBtn'; b.className = 'theme-btn'; b.setAttribute('aria-label', 'สลับโหมดมืด/สว่าง');
-    b.onclick = window.toggleTheme; document.body.appendChild(b);
-    apply(document.documentElement.getAttribute('data-theme'));
-  }
-  if (document.body) mk(); else document.addEventListener('DOMContentLoaded', mk);
-})();
 /* ===================== PUBLIC (ไม่ต้องเข้าสู่ระบบ) + LOGIN ===================== */
 /* ชื่องานแยก 2 บรรทัด: ขึ้นบรรทัดใหม่ที่ \n หรือหลังคำว่า "ภายใน" */
 /* ข้อความเลื่อนใต้หัวเว็บ (ตั้งค่าในเมนูตั้งค่าระบบ) */
@@ -1769,15 +1699,27 @@ function certMedal(rank) {
   return '<svg viewBox="0 0 64 90" class="medal"><path d="M14 0l12 34h12L50 0H38L32 20 26 0z" fill="#0B5D3B"/><path d="M26 0l6 20 6-20z" fill="#14804F"/><circle cx="32" cy="58" r="27" fill="' + t[1] + '"/><circle cx="32" cy="58" r="23.5" fill="' + t[0] + '"/><circle cx="32" cy="58" r="19" fill="none" stroke="' + t[1] + '" stroke-width="1" stroke-dasharray="2 2.2"/><text x="32" y="68" text-anchor="middle" font-size="26" font-weight="800" fill="#fff" font-family="Sarabun,sans-serif">' + rank + '</text></svg>';
 }
 /* เกียรติบัตรกรรมการ: รายชื่อเก็บใน settings.certRefs (บรรทัดละ 1 ชื่อ) */
+var CERT_REF_DEF = 'ได้ปฏิบัติหน้าที่เป็นคณะกรรมการตัดสินการแข่งขัน\nกีฬาภายในต้านภัยยาเสพติด "ราชประชานุเคราะห์เกมส์ ครั้งที่ 14"\nขอขอบคุณในความรับผิดชอบและมีส่วนร่วมให้งานสำเร็จลุล่วงด้วยดี';
+function certRefLines(s) {
+  var t = (s.certRefLines === undefined || s.certRefLines === null || s.certRefLines === '') ? CERT_REF_DEF : String(s.certRefLines);
+  return t.split(/\r?\n/).map(function (x) { return x.trim(); }).filter(Boolean).slice(0, 3);
+}
 function certRefItems() {
-  var s = settingsNow(), role = s.certRefTitle || 'กรรมการตัดสิน';
+  var s = settingsNow(), role = s.certRefTitle || 'กรรมการตัดสิน', lines = certRefLines(s);
   return String(s.certRefs || '').split('\n').map(function (x) { return x.trim(); }).filter(Boolean).map(function (n) {
-    return { key: 'ref|' + n, ref: true, name: n, rank: 0, awardText: 'ได้ปฏิบัติหน้าที่' + role, role: role, eventLabel: String(s.eventName || '') + ' ประจำปีการศึกษา ' + String(s.academicYear || ''), sub: '', hex: '', colorName: '' };
+    return { key: 'ref|' + n, ref: true, name: n, rank: 0, awardText: lines[0] || '', lines: lines, role: role, eventLabel: String(s.eventName || '') + ' ประจำปีการศึกษา ' + String(s.academicYear || ''), sub: '', hex: '', colorName: '' };
   });
 }
 var CERT_TPL = {}, CERT_NOS = {}, CERT_LAY_DRAFT = null;
 var CERT_LAY_DEF = { noX: 91, noY: 10, nameY: 50.5, subY: 59, awardY: 65, eventY: 70.2, noSz: 22, nameSz: 46, lineSz: 32, color: '#1B2A7A' };
-function certLay() {
+var CERT_LAY_REF_DEF = { noX: 91, noY: 10, nameY: 49.5, l1Y: 58.5, l2Y: 63.5, l3Y: 68.3, noSz: 22, nameSz: 46, lineSz: 30, color: '#1B2A7A' }, CERT_LAY_REF_DRAFT = null;
+function certLay(ref) {
+  if (ref) {
+    var r = Object.assign({}, CERT_LAY_REF_DEF), rs = CERT_LAY_REF_DRAFT;
+    if (!rs) { try { rs = JSON.parse(settingsNow().certLayoutRef || '{}'); } catch (e) { rs = {}; } }
+    Object.keys(rs || {}).forEach(function (k) { if (rs[k] !== '' && rs[k] !== null && rs[k] !== undefined) r[k] = rs[k]; });
+    return r;
+  }
   var o = Object.assign({}, CERT_LAY_DEF), src = CERT_LAY_DRAFT;
   if (!src) { try { src = JSON.parse(settingsNow().certLayout || '{}'); } catch (e) { src = {}; } }
   Object.keys(src || {}).forEach(function (k) { if (src[k] !== '' && src[k] !== null && src[k] !== undefined) o[k] = src[k]; });
@@ -1809,9 +1751,9 @@ async function certFontReady() {
 }
 async function certReady() {
   await certFontReady();
-  var ver = settingsNow().certTplVer;
-  if (!ver || CERT_TPL[ver]) return;
-  try { var r = await gsRun('getCertTemplate'); if (r && r.data) CERT_TPL[ver] = r.data; } catch (e) { }
+  var st = settingsNow(), ver = st.certTplVer, rv = st.certTplRefVer;
+  if (ver && !CERT_TPL[ver]) { try { var r = await gsRun('getCertTemplate'); if (r && r.data) CERT_TPL[ver] = r.data; } catch (e) { } }
+  if (rv && !CERT_TPL[rv]) { try { var r2 = await gsRun('getCertTemplate', '', 'ref'); if (r2 && r2.data) CERT_TPL[rv] = r2.data; } catch (e) { } }
 }
 async function certPrep(items, assign) {
   await certReady();
@@ -1824,18 +1766,22 @@ async function certPrep(items, assign) {
   } catch (e) { toast(cleanMsg(e), 'err'); }
 }
 function certTplHtml(it, img) {
-  var L = certLay(), nl = it.name.length, nsz = Math.round(L.nameSz * (nl > 44 ? .55 : nl > 34 ? .7 : nl > 26 ? .85 : 1)), c = 'color:' + esc(L.color) + ';';
+  var L = certLay(!!it.ref), nl = it.name.length, nsz = Math.round(L.nameSz * (nl > 44 ? .55 : nl > 34 ? .7 : nl > 26 ? .85 : 1)), c = 'color:' + esc(L.color) + ';';
   var no = certNoLine(it);
   return '<div class="cert tpl"><img class="tbg" src="' + esc(img) + '" alt="">' +
     (no ? '<div class="tf" style="' + c + 'top:' + L.noY + '%;right:' + (100 - L.noX) + '%;font-size:' + L.noSz + 'px">' + esc(no) + '</div>' : '') +
     '<div class="tf tc" style="' + c + (L.nameColor ? 'color:' + esc(L.nameColor) + ';' : '') + 'top:' + L.nameY + '%;font-size:' + nsz + 'px">' + esc(it.name) + '</div>' +
     (it.sub ? '<div class="tf tc" style="' + c + 'top:' + L.subY + '%;font-size:' + L.lineSz + 'px">' + esc(it.sub) + '</div>' : '') +
-    '<div class="tf tc" style="' + c + 'top:' + L.awardY + '%;font-size:' + L.lineSz + 'px">' + (it.ref ? esc(it.awardText) : 'ได้รับรางวัล' + esc(CERT_AWARD[it.rank])) + '</div>' +
-    '<div class="tf tc" style="' + c + 'top:' + L.eventY + '%;font-size:' + L.lineSz + 'px">' + esc(it.eventLabel) + '</div>' +
+    (it.ref ? (settingsNow().certRefLinesOff === 'true' ? [] : it.lines).map(function (ln, i) {
+      var sz = Math.round(L.lineSz * (ln.length > 62 ? .72 : ln.length > 50 ? .84 : 1));
+      return '<div class="tf tc" style="' + c + 'top:' + L['l' + (i + 1) + 'Y'] + '%;font-size:' + sz + 'px">' + esc(ln) + '</div>';
+    }).join('') :
+    '<div class="tf tc" style="' + c + 'top:' + L.awardY + '%;font-size:' + L.lineSz + 'px">ได้รับรางวัล' + esc(CERT_AWARD[it.rank]) + '</div>' +
+    '<div class="tf tc" style="' + c + 'top:' + L.eventY + '%;font-size:' + L.lineSz + 'px">' + esc(it.eventLabel) + '</div>') +
     '</div>';
 }
 function certHtml(it) {
-  var tv = settingsNow().certTplVer;
+  var st0 = settingsNow(), tv = (it.ref && st0.certTplRefVer && CERT_TPL[st0.certTplRefVer]) ? st0.certTplRefVer : st0.certTplVer;
   if (tv && CERT_TPL[tv]) return certTplHtml(it, CERT_TPL[tv]);
   var s = settingsNow(), t = CERT_TONE[it.rank] || CERT_TONE[4];
   if (it.ref) return certRefClassic(it, s, t);
@@ -1871,9 +1817,9 @@ function certRefClassic(it, s, t) {
     '<div class="orn"><i></i><b></b><i></i></div>' +
     '<div class="lead">ขอมอบเกียรติบัตรฉบับนี้ให้ไว้เพื่อแสดงว่า</div>' +
     '<div class="nm" style="font-size:' + nsz + 'pt' + (certLay().nameColor ? ';color:' + esc(certLay().nameColor) : '') + '">' + esc(it.name) + '</div><div class="sb">&nbsp;</div>' +
-    '<div class="lead2">ได้ปฏิบัติหน้าที่</div><div class="aw" style="color:' + t[1] + '">' + esc(it.role) + '</div>' +
-    '<div class="evn">' + esc(s.eventName) + '</div>' +
-    '<div class="evs">ประจำปีการศึกษา ' + esc(s.academicYear) + '</div>' +
+    '<div class="lead2">' + esc(it.lines[0] || '') + '</div>' +
+    '<div class="aw" style="color:' + t[1] + ';font-size:' + ((it.lines[1] || '').length > 48 ? '17pt' : '') + '">' + esc(it.lines[1] || '') + '</div>' +
+    '<div class="evs" style="margin-top:2mm">' + esc(it.lines[2] || '') + '</div>' +
     '<div class="dt">ให้ไว้ ณ วันที่ ' + esc(thLongDate(s.certDate)) + '</div></div>' +
     (cno ? '<div class="cno">' + esc(cno) + '</div>' : '') +
     '<div class="sg sl"><div class="ln"></div><div class="sn">(' + (esc(s.directorName) || blank) + ')</div><div class="st">ผู้อำนวยการโรงเรียน</div></div>' +
@@ -1918,11 +1864,22 @@ async function certPreview(eid, idx) {
 function pubCerts(p) {
   var s = p.settings;
   if (s.certOpen !== 'true') return '<div class="card empty">ยังไม่เปิดให้ดาวน์โหลดเกียรติบัตร</div>';
-  return '<div class="card mb2"><div class="row sp"><div><h3>ดาวน์โหลดเกียรติบัตร</h3><div class="xs mut mt1">ค้นหาชื่อ/สี/รายการ แล้วกด "ดาวน์โหลด PNG" — ได้ไฟล์ภาพเกียรติบัตรทันที"</div></div><input class="inp" style="max-width:320px" id="certq" placeholder="ค้นหา ชื่อ สี หรือรายการ" value="' + esc(S.pubCertQ || '') + '" oninput="S.pubCertQ=this.value;drawPubCerts()"></div></div><div id="certlist"></div>';
+  var hasRef = certRefItems().length > 0; if (!hasRef) S.pubCertTab = '';
+  var sw = hasRef ? '<div class="tabs mb2" style="max-width:420px"><a class="' + (S.pubCertTab === 'ref' ? '' : 'on') + '" onclick="S.pubCertTab=\'\';renderPublic()">เกียรติบัตรนักกีฬา</a><a class="' + (S.pubCertTab === 'ref' ? 'on' : '') + '" onclick="S.pubCertTab=\'ref\';renderPublic()">เกียรติบัตรกรรมการ</a></div>' : '';
+  return sw + '<div class="card mb2"><div class="row sp"><div><h3>ดาวน์โหลดเกียรติบัตร</h3><div class="xs mut mt1">ค้นหาชื่อ/สี/รายการ แล้วกด "ดาวน์โหลด PNG" — ได้ไฟล์ภาพเกียรติบัตรทันที"</div></div><input class="inp" style="max-width:320px" id="certq" placeholder="ค้นหา ชื่อ สี หรือรายการ" value="' + esc(S.pubCertQ || '') + '" oninput="S.pubCertQ=this.value;drawPubCerts()"></div></div><div id="certlist"></div>';
 }
 function drawPubCerts() {
   var el = $('#certlist'); if (!el) return;
   var p = S.pub, on = certEnabledIds(p.settings), q = String(S.pubCertQ || '').trim().toLowerCase(), h = '';
+  if (S.pubCertTab === 'ref') {
+    var ri = certRefItems().map(function (it, i) { it.i = i; return it; });
+    if (q) ri = ri.filter(function (it) { return it.name.toLowerCase().indexOf(q) > -1; });
+    el.innerHTML = ri.length ? '<div class="card mb2"><div class="row sp mb1"><h3>เกียรติบัตรกรรมการ (' + ri.length + ')</h3>' +
+      (q ? '' : '<button class="btn btn-sm btn-primary" onclick="downloadCerts(certRefItems(), \'เกียรติบัตรกรรมการ\')">ดาวน์โหลด PNG ทั้งหมด</button>') + '</div><div class="tw"><table class="t"><tbody>' + ri.map(function (it) {
+        return '<tr><td><b>' + esc(it.name) + '</b></td><td class="r" style="white-space:nowrap"><button class="btn btn-sm" onclick="certRefPreview(' + it.i + ')">ดูตัวอย่าง</button> <button class="btn btn-sm btn-primary" onclick="downloadCerts([certRefItems()[' + it.i + ']])">ดาวน์โหลด PNG</button></td></tr>';
+      }).join('') + '</tbody></table></div></div>' : '<div class="card empty">' + (q ? 'ไม่พบรายชื่อที่ค้นหา' : 'ยังไม่มีรายชื่อกรรมการ') + '</div>';
+    return;
+  }
   p.events.forEach(function (e) {
     if (!on[e.id]) return;
     var items = certItems(e.id).map(function (it, i) { it.i = i; return it; });
@@ -1968,9 +1925,10 @@ function certRefCard(admin) {
     (items.length ? '<button class="btn btn-sm btn-primary" onclick="downloadCerts(certRefItems(), \'เกียรติบัตรกรรมการ\')">ดาวน์โหลด PNG ทั้งหมด</button>' : '') + '</div>';
   if (admin) {
     h += '<div class="fgrid"><div style="grid-column:1/-1"><label class="lbl">รายชื่อกรรมการ (บรรทัดละ 1 คน)</label><textarea class="inp" id="ct_refs" rows="5" placeholder="เช่น นายสมชาย ใจดี">' + esc(s.certRefs || '') + '</textarea></div>' +
-      '<div><label class="lbl">หน้าที่ที่ระบุบนเกียรติบัตร</label><input class="inp" id="ct_reft" value="' + esc(s.certRefTitle || 'กรรมการตัดสิน') + '" placeholder="กรรมการตัดสิน"></div></div>' +
+      '<div style="grid-column:1/-1"><label class="row" style="margin-bottom:.4rem"><input type="checkbox" id="ct_refoff" style="width:1.1rem;height:1.1rem" ' + (s.certRefLinesOff === 'true' ? 'checked' : '') + '> ไม่พิมพ์ข้อความ 3 บรรทัด (เมื่อภาพแม่แบบมีข้อความนี้อยู่แล้ว — พิมพ์เฉพาะเลขที่และชื่อ)</label><label class="lbl">ข้อความใต้ชื่อ (3 บรรทัด)</label><textarea class="inp" id="ct_refl" rows="3">' + esc(certRefLines(s).join('\n')) + '</textarea></div></div>' +
       '<div class="row mt2"><button class="btn btn-primary" onclick="certRefSave()">บันทึกรายชื่อ</button>' +
       ((S.d.users || []).some(function (u) { return u.role === 'referee'; }) ? '<button class="btn" onclick="certRefFromUsers()">ดึงชื่อจากบัญชีกรรมการ</button>' : '') + '</div>';
+    h += certRefTplBlock(s);
   } else if (!items.length) h += '<div class="empty">ยังไม่มีรายชื่อกรรมการ — ให้ผู้ดูแลระบบเพิ่มรายชื่อ</div>';
   if (items.length) h += '<div class="tw mt2"><table class="t"><tbody>' + items.map(function (it, i) {
     return '<tr><td><b>' + esc(it.name) + '</b></td><td class="r" style="white-space:nowrap"><button class="btn btn-sm" onclick="certRefPreview(' + i + ')">ดูตัวอย่าง</button> <button class="btn btn-sm btn-primary" onclick="downloadCerts([certRefItems()[' + i + ']])">ดาวน์โหลด PNG</button></td></tr>';
@@ -1978,7 +1936,7 @@ function certRefCard(admin) {
   return h + '</div>';
 }
 async function certRefSave() {
-  try { await act('saveCertSettings', [{ certRefs: $('#ct_refs').value, certRefTitle: $('#ct_reft').value }], 'บันทึกรายชื่อกรรมการแล้ว'); } catch (e) { if (cleanMsg(e) !== 'handled') toast(cleanMsg(e), 'err'); }
+  try { await act('saveCertSettings', [{ certRefs: $('#ct_refs').value, certRefLines: $('#ct_refl').value, certRefLinesOff: $('#ct_refoff').checked }], 'บันทึกรายชื่อกรรมการแล้ว'); } catch (e) { if (cleanMsg(e) !== 'handled') toast(cleanMsg(e), 'err'); }
 }
 function certRefFromUsers() {
   var cur = $('#ct_refs').value.split('\n').map(function (x) { return x.trim(); }).filter(Boolean);
@@ -2059,7 +2017,7 @@ async function certNoReset() {
   if (!(await confirmBox('ล้างเลขเกียรติบัตร', 'ลบเลขที่ที่ออกไปแล้วทั้งหมด และเริ่มรันจากเลขเริ่มต้นใหม่ เกียรติบัตรที่เคยพิมพ์ไปแล้วจะมีเลขไม่ตรงกับระบบ ยืนยันหรือไม่?', 'ล้างเลข', true))) return;
   try { await api('resetCertNumbers'); CERT_NOS = {}; toast('ล้างเลขที่แล้ว'); } catch (e) { if (cleanMsg(e) !== 'handled') toast(cleanMsg(e), 'err'); }
 }
-function pickCertTpl(inp) {
+function pickCertTpl(inp, kind) {
   var f = inp.files && inp.files[0]; inp.value = ''; if (!f) return;
   if (!/^image\/(png|jpeg|webp)$/.test(f.type)) { toast('รองรับเฉพาะไฟล์ PNG/JPG/WebP', 'err'); return; }
   var rd = new FileReader();
@@ -2074,19 +2032,52 @@ function pickCertTpl(inp) {
         for (var j = 0; j < qs.length; j++) { var jp = cv.toDataURL('image/jpeg', qs[j]); if (jp.length <= 880000) { out = jp; break; } }
       }
       if (!out) { toast('ภาพซับซ้อนเกินไป กรุณาใช้ภาพที่เล็กลง', 'err'); return; }
-      try { CERT_TPL = {}; await act('saveCertTemplate', [out], 'อัปโหลดแม่แบบเกียรติบัตรแล้ว'); } catch (e) { if (cleanMsg(e) !== 'handled') toast(cleanMsg(e), 'err'); }
+      try { CERT_TPL = {}; await act('saveCertTemplate', [out, kind || ''], 'อัปโหลดแม่แบบเกียรติบัตรแล้ว'); } catch (e) { if (cleanMsg(e) !== 'handled') toast(cleanMsg(e), 'err'); }
     };
     img.onerror = function () { toast('เปิดไฟล์ภาพไม่ได้', 'err'); };
     img.src = rd.result;
   };
   rd.readAsDataURL(f);
 }
-async function removeCertTpl() {
+async function removeCertTpl(kind) {
   if (!(await confirmBox('ลบแม่แบบ', 'ลบภาพแม่แบบและกลับไปใช้แบบมาตรฐานของระบบ?', 'ลบ', true))) return;
-  try { CERT_TPL = {}; await act('saveCertTemplate', [''], 'ลบแม่แบบแล้ว'); } catch (e) { if (cleanMsg(e) !== 'handled') toast(cleanMsg(e), 'err'); }
+  try { CERT_TPL = {}; await act('saveCertTemplate', ['', kind || ''], 'ลบแม่แบบแล้ว'); } catch (e) { if (cleanMsg(e) !== 'handled') toast(cleanMsg(e), 'err'); }
 }
 
-function certsPost() { certFit(); if ($('#certtplprev')) drawCertTplPrev(); }
+/* แม่แบบเกียรติบัตรกรรมการ (แยกจากแม่แบบของนักกีฬา) */
+var CERT_REF_FIELDS = [['noX', 'เลขที่: ตำแหน่งขวา (%)'], ['noY', 'เลขที่: ตำแหน่งบน (%)'], ['nameY', 'ชื่อ: ตำแหน่งบน (%)'], ['l1Y', 'บรรทัดที่ 1: ตำแหน่งบน (%)'], ['l2Y', 'บรรทัดที่ 2: ตำแหน่งบน (%)'], ['l3Y', 'บรรทัดที่ 3: ตำแหน่งบน (%)'],
+  ['noSz', 'ขนาดเลขที่ (px)'], ['nameSz', 'ขนาดชื่อ (px)'], ['lineSz', 'ขนาดตัวอักษร 3 บรรทัด (px)']];
+function certRefTplBlock(s) {
+  var has = !!s.certTplRefVer, L = certLay(true);
+  return '<div class="mt2" style="border-top:1px dashed var(--line);padding-top:.9rem"><h3 class="mb1" style="font-size:1rem">แม่แบบเกียรติบัตรกรรมการ</h3>' +
+    '<div class="hint mb1">อัปโหลดภาพแม่แบบสำหรับกรรมการโดยเฉพาะ (แนวนอน A4 สัดส่วน ๒๙๗×๒๑๐) ถ้าไม่อัปโหลด ระบบจะใช้แม่แบบเกียรติบัตรนักกีฬา (ถ้ามี) หรือแบบมาตรฐาน ฟอนต์และการพิมพ์เลขที่ใช้ค่าเดียวกับเกียรติบัตรนักกีฬา</div>' +
+    '<div class="row mb2"><label class="btn btn-sm btn-primary" style="cursor:pointer">' + (has ? 'เปลี่ยนภาพแม่แบบกรรมการ' : 'อัปโหลดภาพแม่แบบกรรมการ') + '<input type="file" accept="image/png,image/jpeg,image/webp" class="hide" onchange="pickCertTpl(this,\'ref\')"></label>' +
+    (has ? '<button class="btn btn-sm btn-danger" onclick="removeCertTpl(\'ref\')">ลบแม่แบบกรรมการ</button>' : '') + '</div>' +
+    '<div class="fgrid">' + CERT_REF_FIELDS.map(function (f) { return '<div><label class="lbl">' + f[1] + '</label><input class="inp" type="number" step="0.1" id="cr_' + f[0] + '" value="' + L[f[0]] + '" oninput="certRefLayInput()"></div>'; }).join('') +
+    '<div><label class="lbl">สีตัวอักษรทั่วไป</label><input class="inp" type="color" id="cr_color" value="' + esc(L.color) + '" oninput="certRefLayInput()" style="height:2.4rem;padding:.15rem"></div>' +
+    '<div><label class="lbl">สีชื่อ</label><input class="inp" type="color" id="cr_nameColor" value="' + esc(L.nameColor || L.color) + '" oninput="certRefLayInput()" style="height:2.4rem;padding:.15rem"></div></div>' +
+    '<div class="row mt1 mb2"><button class="btn btn-primary btn-sm" onclick="certRefLaySave()">บันทึกตำแหน่ง</button><button class="btn btn-sm" onclick="certRefLayReset()">คืนค่าตำแหน่งเริ่มต้น</button></div>' +
+    '<label class="lbl">ตัวอย่างเกียรติบัตรกรรมการ</label><div id="certrefprev"></div></div>';
+}
+function certRefSample() {
+  var it = certRefItems()[0] || { key: '__refsample', ref: true, name: 'นายตัวอย่าง นามสกุลทดสอบ', rank: 0, awardText: '', lines: certRefLines(settingsNow()), eventLabel: '', sub: '', hex: '', colorName: '' };
+  return Object.assign({}, it, { key: '__refsample', sample: (+(S.d.settings.certNoStart) || 1) });
+}
+function certRefTplPrev() { var el = $('#certrefprev'); if (!el) return; el.innerHTML = certPreviewHtml(certRefSample()); certFit(); }
+async function drawCertRefPrev() { await certReady(); certRefTplPrev(); }
+function certRefLayRead() {
+  var o = {}; CERT_REF_FIELDS.forEach(function (f) { var el = $('#cr_' + f[0]); if (el && el.value !== '') o[f[0]] = +el.value; });
+  var c = $('#cr_color'); if (c) o.color = c.value; var n = $('#cr_nameColor'); if (n) o.nameColor = n.value; return o;
+}
+function certRefLayInput() { CERT_LAY_REF_DRAFT = certRefLayRead(); certRefTplPrev(); }
+async function certRefLaySave() {
+  try { await act('saveCertSettings', [{ certLayoutRef: JSON.stringify(certRefLayRead()) }], 'บันทึกตำแหน่งแล้ว'); CERT_LAY_REF_DRAFT = null; } catch (e) { if (cleanMsg(e) !== 'handled') toast(cleanMsg(e), 'err'); }
+}
+async function certRefLayReset() {
+  try { CERT_LAY_REF_DRAFT = null; await act('saveCertSettings', [{ certLayoutRef: '{}' }], 'คืนค่าเริ่มต้นแล้ว'); } catch (e) { if (cleanMsg(e) !== 'handled') toast(cleanMsg(e), 'err'); }
+}
+
+function certsPost() { certFit(); if ($('#certtplprev')) drawCertTplPrev(); if ($('#certrefprev')) drawCertRefPrev(); }
 
 function pickCertFont(inp) {
   var f = inp.files && inp.files[0]; inp.value = ''; if (!f) return;

@@ -47,6 +47,7 @@ const SCHEMA = {
   Matches: ['id', 'eventId', 'stage', 'rd', 'round', 'no', 'colorA', 'colorB', 'srcA', 'srcB', 'scoreA', 'scoreB', 'winner', 'status', 'date', 'time', 'venue', 'note', 'updatedBy', 'updatedAt'],
   Banner: ['id', 'data'],
   CertTpl: ['id', 'data'],
+  CertTplRef: ['id', 'data'],
   CertNo: ['key', 'no', 'at'],
   Seasons: ['id', 'year', 'archivedAt', 'archivedBy', 'data'],
   CertFont: ['id', 'data'],
@@ -66,6 +67,10 @@ const DEFAULT_SETTINGS = {
   endDate: '',
   venue: 'สนามกีฬาโรงเรียน',
   announcement: '',
+  tickerOn: 'false',       // ข้อความเลื่อนใต้หัวเว็บหน้าสาธารณะ
+  tickerText: '',          // หลายข้อความ: บรรทัดละ 1 ข้อความ
+  tickerSpeed: 'normal',   // slow | normal | fast
+  tickerTone: 'green',     // green | gold | blue | red
   logoUrl: '',
   directorName: '',
   registrationOpen: 'true',      // เปิดรับลงทะเบียนนักกีฬา (หัวหน้าสีแก้ไขได้เมื่อเปิดอยู่)
@@ -81,6 +86,10 @@ const DEFAULT_SETTINGS = {
   certChairTitle: 'ประธานกรรมการจัดการแข่งขัน',
   certRefs: '',
   certRefTitle: 'กรรมการตัดสิน',
+  certRefLinesOff: 'false',      // true = ไม่พิมพ์ข้อความ 3 บรรทัดบนแม่แบบกรรมการ (แม่แบบมีข้อความอยู่แล้ว)
+  certRefLines: 'ได้ปฏิบัติหน้าที่เป็นคณะกรรมการตัดสินการแข่งขัน\nกีฬาภายในต้านภัยยาเสพติด "ราชประชานุเคราะห์เกมส์ ครั้งที่ 14"\nขอขอบคุณในความรับผิดชอบและมีส่วนร่วมให้งานสำเร็จลุล่วงด้วยดี',
+  certTplRefVer: '',             // รุ่นของภาพแม่แบบเกียรติบัตรกรรมการ
+  certLayoutRef: '',             // ตำแหน่งตัวอักษรบนแม่แบบกรรมการ (JSON)
   certTplVer: '',                // รุ่นของภาพแม่แบบเกียรติบัตร (ว่าง = ใช้แบบมาตรฐานของระบบ)
   certFontVer: '',               // รุ่นของไฟล์ฟอนต์เกียรติบัตรที่อัปโหลด (ว่าง = ใช้ฟอนต์ Sangkhamonthon ที่ติดตั้งในเครื่อง/ฟอนต์สำรอง)
   certLayout: '',                // ตำแหน่ง/สีตัวอักษรบนแม่แบบ (JSON)
@@ -92,7 +101,7 @@ const DEFAULT_SETTINGS = {
   certNoThai: 'true',            // ใช้เลขไทย
   certDate: ''                   // วันที่ออกเกียรติบัตร (ว่าง = วันที่พิมพ์)
 };
-const PUBLIC_SETTING_KEYS = ['orgName', 'certFontVer', 'certTplVer', 'certLayout', 'certNoOn', 'certNoPrefix', 'certNoPad', 'certNoYear', 'certNoThai', 'schoolName', 'academicYear', 'eventName', 'startDate', 'endDate', 'venue', 'announcement', 'logoUrl', 'publicScoreVisible', 'publicShowNames', 'contestShown', 'directorName', 'bannerVer', 'certOpen', 'certEvents', 'certChairName', 'certChairTitle', 'certDate'];
+const PUBLIC_SETTING_KEYS = ['certRefs', 'certRefLines', 'certRefLinesOff', 'certTplRefVer', 'certLayoutRef', 'tickerOn', 'tickerText', 'tickerSpeed', 'tickerTone', 'orgName', 'certFontVer', 'certTplVer', 'certLayout', 'certNoOn', 'certNoPrefix', 'certNoPad', 'certNoYear', 'certNoThai', 'schoolName', 'academicYear', 'eventName', 'startDate', 'endDate', 'venue', 'announcement', 'logoUrl', 'publicScoreVisible', 'publicShowNames', 'contestShown', 'directorName', 'bannerVer', 'certOpen', 'certEvents', 'certChairName', 'certChairTitle', 'certDate'];
 
 // สีเริ่มต้นของระบบ (แก้ไข/เพิ่ม/ลบได้ในเมนู "สี")
 const DEFAULT_COLORS = [
@@ -793,6 +802,7 @@ function getPublicBoard() {
   const st = getSettingsMap_();
   const settings = {};
   PUBLIC_SETTING_KEYS.forEach(k => settings[k] = st[k] || '');
+  if (st.certOpen !== 'true') settings.certRefs = ''; // รายชื่อกรรมการเปิดเผยต่อสาธารณะเมื่อเปิดให้ดาวน์โหลดเกียรติบัตรเท่านั้น
   const colors = sortByOrder_(sheetToObjects_(getSheet_('Colors'))).map(c => ({ id: c.id, name: c.name, hex: c.hex, motto: c.motto }));
   const fullEvents = sortByOrder_(sheetToObjects_(getSheet_('Events')));
   const shown = {};
@@ -806,6 +816,7 @@ function getPublicBoard() {
   const showNames = st.publicShowNames === 'true';
   let standings = null;
   let results = [];
+  let members = [];
   if (visible) {
     const allResults = sheetToObjects_(getSheet_('Results'));
     const adjustments = sheetToObjects_(getSheet_('Adjustments'));
@@ -819,13 +830,19 @@ function getPublicBoard() {
       eventId: r.eventId, rank: toInt_(r.rank), colorId: r.colorId, points: Number(r.points) || 0,
       athleteName: (showNames || certOn[r.eventId]) ? r.athleteName : '', record: r.record
     }));
+    if (Object.keys(certOn).length) { // สมาชิกทีมของรายการที่เปิดให้โหลดเกียรติบัตร (เฉพาะสีที่ได้อันดับ 1–4)
+      const mm = teamMembersMap_(fullEvents.filter(e => certOn[e.id]), sheetToObjects_(getSheet_('Students')), sheetToObjects_(getSheet_('Entries')));
+      const ranked = {};
+      allResults.forEach(r => { const rk = toInt_(r.rank, 0); if (rk >= 1 && rk <= 4 && certOn[r.eventId] && finishedIds[r.eventId]) ranked[r.eventId + '|' + r.colorId] = true; });
+      Object.keys(mm).forEach(k => { if (ranked[k]) { const p = k.split('|'); mm[k].forEach(m => members.push({ e: p[0], c: p[1], n: m.n, k: m.k })); } });
+    }
   }
   let matches = loadMatches_().map(m => ({
     id: m.id, eventId: m.eventId, stage: m.stage, rd: m.rd, round: m.round, no: m.no, colorA: m.colorA, colorB: m.colorB,
     scoreA: visible ? m.scoreA : '', scoreB: visible ? m.scoreB : '', winner: visible ? m.winner : '',
     status: visible ? m.status : 'planned', date: m.date, time: m.time, venue: m.venue
   }));
-  const out = { settings: settings, colors: colors, events: events, standings: standings, results: results, matches: matches, matchRank: visible ? matchRankMap_(matches) : {}, visible: visible, updatedAt: nowIso_() };
+  const out = { settings: settings, colors: colors, events: events, standings: standings, results: results, members: members, matches: matches, matchRank: visible ? matchRankMap_(matches) : {}, visible: visible, updatedAt: nowIso_() };
   try { cache.put('PUBLIC_BOARD_V1', JSON.stringify(out), PUBLIC_CACHE_SEC); } catch (e) {}
   return out;
 }
@@ -891,6 +908,8 @@ function saveCertSettings(sid, p) {
       map.certEvents = ids.join(',');
     }
     ['directorName', 'certChairName', 'certChairTitle'].forEach(k => { if (p[k] !== undefined) map[k] = String(p[k] || '').trim().slice(0, 80); });
+    if (p.certRefLinesOff !== undefined) map.certRefLinesOff = (p.certRefLinesOff === true || p.certRefLinesOff === 'true') ? 'true' : 'false';
+    if (p.certRefLines !== undefined) map.certRefLines = String(p.certRefLines || '').split(/\r?\n/).map(x => x.trim()).filter(Boolean).slice(0, 3).map(x => x.slice(0, 120)).join('\n');
     if (p.certRefTitle !== undefined) map.certRefTitle = String(p.certRefTitle || '').trim().slice(0, 60) || 'กรรมการตัดสิน';
     if (p.certRefs !== undefined) {
       const names = (Array.isArray(p.certRefs) ? p.certRefs : String(p.certRefs || '').split(/\r?\n/))
@@ -901,16 +920,17 @@ function saveCertSettings(sid, p) {
     ['certNoOn', 'certNoYear', 'certNoThai'].forEach(k => { if (p[k] !== undefined) map[k] = (p[k] === true || p[k] === 'true') ? 'true' : 'false'; });
     if (p.certNoStart !== undefined) map.certNoStart = String(Math.max(1, Math.min(999999, toInt_(p.certNoStart, 1))));
     if (p.certNoPad !== undefined) map.certNoPad = String(Math.max(1, Math.min(8, toInt_(p.certNoPad, 3))));
-    if (p.certLayout !== undefined) {
+    ['certLayout', 'certLayoutRef'].forEach(lk => {
+      if (p[lk] === undefined) return;
       let lay = {};
-      try { lay = typeof p.certLayout === 'string' ? JSON.parse(p.certLayout || '{}') : (p.certLayout || {}); } catch (e) { throw new Error('รูปแบบตำแหน่งไม่ถูกต้อง'); }
+      try { lay = typeof p[lk] === 'string' ? JSON.parse(p[lk] || '{}') : (p[lk] || {}); } catch (e) { throw new Error('รูปแบบตำแหน่งไม่ถูกต้อง'); }
       const out = {};
       Object.keys(lay).slice(0, 30).forEach(k => {
-        if (!/^[a-zA-Z]{1,12}$/.test(k)) return;
+        if (!/^[a-zA-Z0-9]{1,12}$/.test(k)) return;
         if (k === 'color' || k === 'nameColor') { if (/^#[0-9a-fA-F]{6}$/.test(String(lay[k]))) out[k] = String(lay[k]); } else { const n = Number(lay[k]); if (isFinite(n)) out[k] = Math.max(0, Math.min(100, n)); }
       });
-      map.certLayout = JSON.stringify(out);
-    }
+      map[lk] = JSON.stringify(out);
+    });
     if (p.certDate !== undefined) {
       const d = String(p.certDate || '').trim();
       if (d && !/^\d{4}-\d{2}-\d{2}$/.test(d)) throw new Error('รูปแบบวันที่ไม่ถูกต้อง');
@@ -967,7 +987,8 @@ function getBanner(ver) {
 /* ---------- แม่แบบเกียรติบัตร (ภาพพื้นหลังที่อัปโหลด) ---------- */
 const CERT_TPL_MAX_ = 900000;
 
-function saveCertTemplate(sid, dataUrl) {
+function saveCertTemplate(sid, dataUrl, kind) {
+  const isRef = String(kind || '') === 'ref', shName = isRef ? 'CertTplRef' : 'CertTpl', verKey = isRef ? 'certTplRefVer' : 'certTplVer';
   const u = requireRole_(sid, ['admin']);
   return withLock_(() => {
     const v = String(dataUrl || '').trim();
@@ -979,26 +1000,27 @@ function saveCertTemplate(sid, dataUrl) {
       ver = String(new Date().getTime());
       for (let i = 0; i * BANNER_CHUNK_ < v.length; i++) rows.push({ id: String(i), data: v.substr(i * BANNER_CHUNK_, BANNER_CHUNK_) });
     }
-    getSheet_('CertTpl', true);
-    writeTable_('CertTpl', rows);
+    getSheet_(shName, true);
+    writeTable_(shName, rows);
     const map = {};
     sheetToObjects_(getSheet_('Settings')).forEach(r => { map[r.key] = r.value; });
-    map.certTplVer = ver;
+    map[verKey] = ver;
     writeTable_('Settings', Object.keys(map).map(k => ({ key: k, value: map[k] })));
     bustPublicCache_();
-    logAction_(u, 'saveCertTemplate', v ? 'อัปโหลดแม่แบบเกียรติบัตร (' + Math.round(v.length / 1024) + ' KB)' : 'ลบแม่แบบเกียรติบัตร');
+    logAction_(u, 'saveCertTemplate', (isRef ? 'กรรมการ: ' : '') + (v ? 'อัปโหลดแม่แบบเกียรติบัตร (' + Math.round(v.length / 1024) + ' KB)' : 'ลบแม่แบบเกียรติบัตร'));
     return { ok: true, ver: ver };
   });
 }
 
-function getCertTemplate(ver) {
+function getCertTemplate(ver, kind) {
   ensureDatabase_(false);
-  const cur = String(getSettingsMap_().certTplVer || '');
+  const isRef = String(kind || '') === 'ref';
+  const cur = String(getSettingsMap_()[isRef ? 'certTplRefVer' : 'certTplVer'] || '');
   if (!cur) return { ok: true, ver: '', data: '' };
   const cache = CacheService.getScriptCache();
-  const key = 'CERTTPL_' + cur;
+  const key = (isRef ? 'CERTTPLR_' : 'CERTTPL_') + cur;
   try { const hit = cache.get(key + '_n'); if (hit) { const n = +hit, parts = []; for (let i = 0; i < n; i++) { const c = cache.get(key + '_' + i); if (!c) { parts.length = 0; break; } parts.push(c); } if (parts.length === n && n > 0) return { ok: true, ver: cur, data: parts.join('') }; } } catch (e) {}
-  const rows = sheetToObjects_(getSheet_('CertTpl', true)).sort((a, b) => toInt_(a.id, 0) - toInt_(b.id, 0));
+  const rows = sheetToObjects_(getSheet_(isRef ? 'CertTplRef' : 'CertTpl', true)).sort((a, b) => toInt_(a.id, 0) - toInt_(b.id, 0));
   const data = rows.map(r => r.data).join('');
   try { rows.forEach((r, i) => cache.put(key + '_' + i, r.data, 21600)); cache.put(key + '_n', String(rows.length), 21600); } catch (e) {}
   return { ok: true, ver: cur, data: data };
@@ -1043,6 +1065,21 @@ function getCertFont(ver) {
 }
 
 /* ---------- เลขที่เกียรติบัตร (รันเลขต่อเนื่อง จำได้ถาวร) ---------- */
+/** รายชื่อสมาชิกทีม (เกียรติบัตรรายบุคคลของกีฬาประเภททีม): คืน map "eventId|colorId" -> [{n: ชื่อ, k: ชั้น/ห้อง}] */
+function teamMembersMap_(events, students, entries) {
+  const st = {}; students.forEach(s => { st[s.id] = s; });
+  const teamEv = {}; events.forEach(e => { if (e.mode === 'team') teamEv[e.id] = true; });
+  const out = {};
+  entries.forEach(en => {
+    if (!teamEv[en.eventId]) return;
+    const s = st[en.studentId]; if (!s || !s.fullname) return;
+    const key = en.eventId + '|' + en.colorId;
+    (out[key] = out[key] || []).push({ n: String(s.fullname).replace(/[|]/g, ' ').trim(), k: s.classLevel ? s.classLevel + (s.room ? '/' + s.room : '') : '' });
+  });
+  Object.keys(out).forEach(k => { out[k].sort((a, b) => String(a.n).localeCompare(String(b.n), 'th')); });
+  return out;
+}
+
 function certKey_(r) { return [r.eventId, toInt_(r.rank, 0), r.colorId, String(r.athleteName || '')].join('|'); }
 
 /** ออกเลขให้คีย์ที่ยังไม่มีเลข (ต้องเรียกภายใน withLock_) คืนแผนที่ key -> เลข */
@@ -1066,10 +1103,16 @@ function validCertKeys_(onlyEnabled) {
   const ev = {};
   sheetToObjects_(getSheet_('Events')).forEach(e => { ev[e.id] = e; });
   const list = [];
+  const mem = teamMembersMap_(sheetToObjects_(getSheet_('Events')), sheetToObjects_(getSheet_('Students')), sheetToObjects_(getSheet_('Entries')));
   sheetToObjects_(getSheet_('Results')).forEach(r => {
     const rk = toInt_(r.rank, 0);
     if (rk < 1 || rk > 4 || !ev[r.eventId]) return;
     if (onlyEnabled && !on[r.eventId]) return;
+    const ms = !String(r.athleteName || '') ? (mem[r.eventId + '|' + r.colorId] || []) : [];
+    if (ms.length) { // กีฬาประเภททีม: ออกเกียรติบัตรรายบุคคลให้สมาชิกทีมที่ลงทะเบียน
+      ms.forEach(m => list.push({ key: [r.eventId, rk, r.colorId, m.n].join('|'), eventId: r.eventId, rank: rk, so: toInt_(ev[r.eventId].sortOrder, 0), code: String(ev[r.eventId].code || '') }));
+      return;
+    }
     list.push({ key: certKey_(r), eventId: r.eventId, rank: rk, so: toInt_(ev[r.eventId].sortOrder, 0), code: String(ev[r.eventId].code || '') });
   });
   list.sort((a, b) => a.so - b.so || (a.code < b.code ? -1 : a.code > b.code ? 1 : 0) || a.rank - b.rank);
@@ -1106,6 +1149,7 @@ function publicCertNumbers(keys) {
   return withLock_(() => {
     const ok = {};
     validCertKeys_(true).forEach(v => { ok[v.key] = true; });
+    String(getSettingsMap_().certRefs || '').split('\n').forEach(n => { n = n.trim(); if (n) ok['ref|' + n] = true; });
     let ks = (Array.isArray(keys) ? keys.map(String) : []).filter(k => ok[k]);
     ks = ks.filter((k, i) => ks.indexOf(k) === i).slice(0, 50);
     return { ok: true, nos: assignCertNos_(ks) };
@@ -1230,6 +1274,10 @@ function saveSettings(sid, payload) {
       if (k === 'defaultPoints') {
         if (!parsePoints_(v).length) throw new Error('คะแนนมาตรฐานต้องเป็นตัวเลขคั่นด้วยจุลภาค เช่น 5,3,2,1');
       }
+      if (k === 'tickerOn') v = (v === 'true' || v === '1') ? 'true' : 'false';
+      if (k === 'tickerText') v = String(payload[k] || '').replace(/\r/g, '').split('\n').map(x => x.replace(/\s+/g, ' ').trim().slice(0, 200)).filter(Boolean).slice(0, 10).join('\n');
+      if (k === 'tickerSpeed') v = ['slow', 'normal', 'fast'].indexOf(v) < 0 ? 'normal' : v;
+      if (k === 'tickerTone') v = ['green', 'gold', 'blue', 'red'].indexOf(v) < 0 ? 'green' : v;
       if (k === 'maxEventsPerStudent') v = String(Math.max(0, toInt_(v, 0)));
       if (['registrationOpen', 'publicScoreVisible', 'publicShowNames'].indexOf(k) !== -1) v = (v === 'true' || v === '1') ? 'true' : 'false';
       if (k === 'logoUrl' && v) {
