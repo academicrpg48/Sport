@@ -522,7 +522,7 @@ function clearDataCache(sid) {
 }
 
 function bustPublicCache_() {
-  try { CacheService.getScriptCache().remove('PUBLIC_BOARD_V1'); } catch (e) {}
+  try { CacheService.getScriptCache().remove('PUBLIC_BOARD_V2'); } catch (e) {}
 }
 
 function logAction_(u, action, detail) {
@@ -796,7 +796,7 @@ function getPublicBoard() {
   ensureDatabase_(false);
   const cache = CacheService.getScriptCache();
   try {
-    const hit = cache.get('PUBLIC_BOARD_V1');
+    const hit = cache.get('PUBLIC_BOARD_V2');
     if (hit) return JSON.parse(hit);
   } catch (e) {}
   const st = getSettingsMap_();
@@ -843,7 +843,7 @@ function getPublicBoard() {
     status: visible ? m.status : 'planned', date: m.date, time: m.time, venue: m.venue
   }));
   const out = { settings: settings, colors: colors, events: events, standings: standings, results: results, members: members, matches: matches, matchRank: visible ? matchRankMap_(matches) : {}, visible: visible, updatedAt: nowIso_() };
-  try { cache.put('PUBLIC_BOARD_V1', JSON.stringify(out), PUBLIC_CACHE_SEC); } catch (e) {}
+  try { cache.put('PUBLIC_BOARD_V2', JSON.stringify(out), PUBLIC_CACHE_SEC); } catch (e) {}
   return out;
 }
 
@@ -1097,6 +1097,21 @@ function assignCertNos_(keys) {
   return out;
 }
 
+/** คีย์เกียรติบัตรกรรมการตามลำดับในรายชื่อ */
+function refCertKeys_() {
+  const seen = {}, out = [];
+  String(getSettingsMap_().certRefs || '').split('\n').forEach(n => { n = n.trim(); if (n && !seen[n]) { seen[n] = true; out.push('ref|' + n); } });
+  return out;
+}
+/** ออกเลข: ถ้ามีเกียรติบัตรกรรมการรวมอยู่ด้วย ให้ออกเลขนักกีฬาทุกใบก่อน แล้วจึงออกเลขกรรมการตามลำดับรายชื่อ */
+function assignCertNosAthletesFirst_(ks) {
+  if (!ks.some(k => k.indexOf('ref|') === 0)) return assignCertNos_(ks);
+  const all = validCertKeys_(false).map(v => v.key).concat(refCertKeys_());
+  const nos = assignCertNos_(all), out = {};
+  ks.forEach(k => { if (nos[k] !== undefined) out[k] = nos[k]; });
+  return out;
+}
+
 function validCertKeys_(onlyEnabled) {
   const st = getSettingsMap_(), on = {};
   String(st.certEvents || '').split(',').forEach(x => { if (x) on[x] = true; });
@@ -1126,9 +1141,9 @@ function assignCertNumbers(sid, keys, all) {
     const valid = validCertKeys_(false), ok = {};
     valid.forEach(v => { ok[v.key] = true; });
     String(getSettingsMap_().certRefs || '').split('\n').forEach(n => { n = n.trim(); if (n) ok['ref|' + n] = true; }); // เกียรติบัตรกรรมการ
-    let ks = all ? valid.map(v => v.key) : (Array.isArray(keys) ? keys.map(String).filter(k => ok[k]) : []);
+    let ks = all ? valid.map(v => v.key).concat(refCertKeys_()) : (Array.isArray(keys) ? keys.map(String).filter(k => ok[k]) : []);
     ks = ks.filter((k, i) => ks.indexOf(k) === i).slice(0, 500);
-    const nos = assignCertNos_(ks);
+    const nos = all ? assignCertNos_(ks) : assignCertNosAthletesFirst_(ks);
     if (all) logAction_(u, 'assignCertNumbers', 'ออกเลขทั้งหมด ' + ks.length + ' ฉบับ');
     return { ok: true, nos: nos };
   });
@@ -1152,7 +1167,7 @@ function publicCertNumbers(keys) {
     String(getSettingsMap_().certRefs || '').split('\n').forEach(n => { n = n.trim(); if (n) ok['ref|' + n] = true; });
     let ks = (Array.isArray(keys) ? keys.map(String) : []).filter(k => ok[k]);
     ks = ks.filter((k, i) => ks.indexOf(k) === i).slice(0, 50);
-    return { ok: true, nos: assignCertNos_(ks) };
+    return { ok: true, nos: assignCertNosAthletesFirst_(ks) };
   });
 }
 
