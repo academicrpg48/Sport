@@ -1,6 +1,6 @@
 /* Service Worker: แคชตัวแอป (HTML/ไอคอน) ให้เปิดได้เร็วและเปิดหน้าแอปได้แม้ออฟไลน์
    ข้อมูลจริงมาจาก Google Apps Script เสมอ (ข้ามโดเมน ไม่ถูกแคชที่นี่) */
-var CACHE = 'rajaprachagames-v3';
+var CACHE = 'rajaprachagames-v5';
 var SHELL = ['./', 'index.html', 'config.js', 'manifest.webmanifest', 'icons/icon-192.png', 'icons/icon-512.png'];
 self.addEventListener('install', function (e) {
   e.waitUntil(caches.open(CACHE).then(function (c) { return c.addAll(SHELL); }).then(function () { return self.skipWaiting(); }));
