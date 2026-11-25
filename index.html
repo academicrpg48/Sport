@@ -349,10 +349,10 @@ table.t tbody tr:hover{background:#F3FCF7}
   .bnav a svg{width:22px;height:22px}.bnav a span{max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
   .bnav a.on{color:var(--g700);background:var(--g50)}
   .main{padding-bottom:5.5rem!important}.menu-btn{display:none!important}
-  .pub-body .tabs{position:fixed;left:0;right:0;bottom:0;z-index:800;margin:0;border-radius:0;border:0;border-top:1px solid var(--line);padding:.25rem .2rem calc(.25rem + env(safe-area-inset-bottom,0px));gap:0;background:rgba(255,255,255,.95);overflow:visible;box-shadow:0 -8px 24px -12px rgba(5,95,70,.35)}
-  .pub-body .tabs a{flex:1 1 0;min-width:0;display:flex;flex-direction:column;align-items:center;gap:.1rem;padding:.35rem .1rem;border-radius:12px;font-size:.68rem;font-weight:700;white-space:normal;line-height:1.15}
-  .pub-body .tabs a svg{display:block;width:22px;height:22px}
-  .pub-body .tabs a.on{background:var(--g50);color:var(--g700);box-shadow:none}
+  .pub-body>.ptabs{position:fixed;left:0;right:0;bottom:0;z-index:800;margin:0;border-radius:0;border:0;border-top:1px solid var(--line);padding:.25rem .2rem calc(.25rem + env(safe-area-inset-bottom,0px));gap:0;background:rgba(255,255,255,.95);overflow:visible;box-shadow:0 -8px 24px -12px rgba(5,95,70,.35)}
+  .pub-body>.ptabs a{flex:1 1 0;min-width:0;display:flex;flex-direction:column;align-items:center;gap:.1rem;padding:.35rem .1rem;border-radius:12px;font-size:.68rem;font-weight:700;white-space:normal;line-height:1.15}
+  .pub-body>.ptabs a svg{display:block;width:22px;height:22px}
+  .pub-body>.ptabs a.on{background:var(--g50);color:var(--g700);box-shadow:none}
   .pub-body{padding-bottom:6rem}#toasts{bottom:78px}
 }
 /* ข่าวสารประชาสัมพันธ์ */
@@ -791,7 +791,7 @@ async function renderPublic() {
     '<button class="btn btn-sun" onclick="loginModal()">เข้าสู่ระบบ</button></div>' +
     '<div class="meta" style="margin-top:1.1rem">' + meta.map(function (m) { return '<span>' + m + '</span>'; }).join('') + '</div></div></div>' +
     '<div class="pub-body">' + bannerBoxHtml(s.bannerVer) + tickerHtml(s) + (s.announcement ? '<div class="notice">📢 ' + esc(s.announcement) + '</div>' : '') + pubNewsHtml(p) +
-    '<div class="tabs">' + tabs.map(function (t) { return '<a class="' + (S.pubTab === t[0] ? 'on' : '') + '" onclick="S.pubTab=\'' + t[0] + '\';renderPublic();window.scrollTo(0,0)">' + icon(PUB_TAB_ICON[t[0]] || 'list') + '<span>' + t[1] + '</span></a>'; }).join('') + '</div>' +
+    '<div class="tabs ptabs">' + tabs.map(function (t) { return '<a class="' + (S.pubTab === t[0] ? 'on' : '') + '" onclick="S.pubTab=\'' + t[0] + '\';renderPublic();window.scrollTo(0,0)">' + icon(PUB_TAB_ICON[t[0]] || 'list') + '<span>' + t[1] + '</span></a>'; }).join('') + '</div>' +
     body + '<div class="c xs mut mt3">ข้อมูลอัปเดตอัตโนมัติ · ล่าสุด ' + esc(fmtDateTime(p.updatedAt)) + '</div></div>';
   if (S.pubTab === 'cert') drawPubCerts();
   if (s.bannerVer) loadBanner();
