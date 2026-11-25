@@ -4,16 +4,6 @@
 <base target="_top">
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<link rel="manifest" href="manifest.webmanifest?v=2">
-<meta name="theme-color" content="#065F46">
-<meta name="mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-title" content="ราชประชาเกมส์">
-<meta name="application-name" content="ราชประชาเกมส์">
-<link rel="icon" type="image/png" href="icons/icon-192-v2.png">
-<link rel="apple-touch-icon" href="icons/apple-touch-icon-v2.png">
-<script src="config.js"></script>
-
 <title>ราชประชาเกมส์</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@400;600;700;800&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
@@ -324,6 +314,7 @@ table.t tbody tr:hover{background:#F3FCF7}
 .pr .sg3{display:grid;grid-template-columns:auto auto auto;column-gap:.25rem;justify-content:center;row-gap:.5rem;align-items:baseline;text-align:center}.pr .sg3 .dt,.pr .sg3 .nm{text-align:center;overflow:hidden;white-space:nowrap}
 .pr .sign{display:flex;justify-content:center;margin-top:3rem;text-align:center}
 .pr .pb{page-break-before:always}
+.pr .bkh h1,.pr .bkh h2{font-size:20pt;line-height:normal;margin:0}
 @media print{
   @page{size:A4;margin:14mm 14mm 14mm 16mm}
   body{background:#fff!important}
@@ -331,6 +322,55 @@ table.t tbody tr:hover{background:#F3FCF7}
   body.printing #print-area{display:block!important}
 }
 
+/* สูจิบัตร */
+.bk-cv{width:210mm;height:296.8mm;position:relative;overflow:hidden;background:#fff;box-sizing:border-box;margin:0;padding:0;page:cover;break-after:page;page-break-after:always;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+.bk-pdf>img.bk-img{object-fit:contain}
+.bk-cv.bk-b{break-before:page;page-break-before:always}.bk-cv.bk-last{break-after:auto;page-break-after:auto}
+.bk-cv>img.bk-img{position:absolute;left:0;top:0;width:100%;height:100%;object-fit:cover;display:block}
+.bk-def{display:flex;align-items:center;justify-content:center;text-align:center;color:#fff;font-family:'Sarabun','TH Sarabun New',sans-serif;background:linear-gradient(165deg,#064E3B 0,#0B5D3B 55%,#0F7A4F 100%)}
+.bk-def:before{content:"";position:absolute;inset:10mm;border:1.2mm solid #E8C25A}
+.bk-def:after{content:"";position:absolute;inset:14mm;border:.3mm solid rgba(232,194,90,.8)}
+.bk-def .in{position:relative;width:100%;padding:0 26mm;z-index:1}
+.bk-def .lg{width:46mm;height:46mm;object-fit:contain;border-radius:50%;background:#fff;padding:2.5mm;display:block;margin:0 auto 10mm}
+.bk-def .o{font-size:15pt;opacity:.9}.bk-def .sc{font-size:22pt;font-weight:700;margin-top:1mm}
+.bk-def .t{font-size:34pt;font-weight:700;color:#F3D774;letter-spacing:1mm;margin-top:22mm}
+.bk-def .e{font-size:42pt;font-weight:800;line-height:1.1;margin-top:3mm}
+.bk-def .y{font-size:20pt;margin-top:6mm}.bk-def .d{font-size:15pt;margin-top:20mm;opacity:.95}
+.bk-thumb{width:210px;height:297px;overflow:hidden;position:relative;border:1px solid var(--line);border-radius:6px;background:#fff;box-shadow:0 6px 18px -10px rgba(0,0,0,.4)}
+.bk-thumb>.bk-cv{position:absolute;left:0;top:0;transform:scale(.2646);transform-origin:0 0}
+@media print{@page cover{size:A4;margin:0}}
+/* โทรศัพท์: ปุ่มเข้าสู่ระบบอยู่มุมบนขวา */
+@media(max-width:560px){.hero{padding-top:3rem}.hero .wrap{position:static}.hero .wrap>.row.sp>.btn-sun{position:absolute;z-index:2;top:.65rem;right:.9rem;padding:.35rem .95rem;font-size:.85rem}}
+/* แถบเมนูด้านล่าง (โทรศัพท์/แท็บเล็ต) */
+.bnav{display:none}.tabs a svg{display:none}
+@media(max-width:900px){
+  .bnav{display:flex;position:fixed;left:0;right:0;bottom:0;z-index:800;background:rgba(255,255,255,.95);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-top:1px solid var(--line);box-shadow:0 -8px 24px -12px rgba(5,95,70,.35);padding:.25rem .2rem calc(.25rem + env(safe-area-inset-bottom,0px))}
+  .bnav a{flex:1 1 0;min-width:0;display:flex;flex-direction:column;align-items:center;gap:.1rem;padding:.35rem .1rem;border-radius:12px;color:var(--mut);font-size:.68rem;font-weight:700;cursor:pointer;text-align:center;line-height:1.15}
+  .bnav a svg{width:22px;height:22px}.bnav a span{max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .bnav a.on{color:var(--g700);background:var(--g50)}
+  .main{padding-bottom:5.5rem!important}.menu-btn{display:none!important}
+  .pub-body .tabs{position:fixed;left:0;right:0;bottom:0;z-index:800;margin:0;border-radius:0;border:0;border-top:1px solid var(--line);padding:.25rem .2rem calc(.25rem + env(safe-area-inset-bottom,0px));gap:0;background:rgba(255,255,255,.95);overflow:visible;box-shadow:0 -8px 24px -12px rgba(5,95,70,.35)}
+  .pub-body .tabs a{flex:1 1 0;min-width:0;display:flex;flex-direction:column;align-items:center;gap:.1rem;padding:.35rem .1rem;border-radius:12px;font-size:.68rem;font-weight:700;white-space:normal;line-height:1.15}
+  .pub-body .tabs a svg{display:block;width:22px;height:22px}
+  .pub-body .tabs a.on{background:var(--g50);color:var(--g700);box-shadow:none}
+  .pub-body{padding-bottom:6rem}#toasts{bottom:78px}
+}
+/* ข่าวสารประชาสัมพันธ์ */
+.nws{display:flex;gap:.9rem;padding:.8rem;border:1px solid var(--line);border-radius:14px;background:#fff;margin-top:.7rem}
+.nws.pin{border-left:4px solid #E11D48;background:#FFFBFB}
+.nws .th{flex:0 0 112px;height:76px;border-radius:10px;overflow:hidden;background:linear-gradient(135deg,#D1FAE5,#FEF3C7);display:grid;place-items:center}
+.nws .th img{width:100%;height:100%;object-fit:cover;display:block}.nws .nph{font-size:1.6rem;opacity:.7}
+.nws .nb{min-width:0;flex:1}.nws h4{margin:.35rem 0 .15rem;font-size:1.06rem;line-height:1.3}.nws .ns{color:var(--mut);font-size:.92rem;line-height:1.4}
+.nsch{margin-top:.6rem;border-top:1px dashed var(--line);padding-top:.5rem}.nsch h5{margin:.5rem 0 .2rem;font-size:.9rem;color:var(--g900)}
+.nsch table{width:100%;border-collapse:collapse;font-size:.85rem}.nsch td{padding:.25rem .4rem;border-bottom:1px solid var(--line);vertical-align:top}.nsch td:first-child{white-space:nowrap;width:1%;color:var(--mut)}.nsch td:last-child{color:var(--mut);text-align:right}
+.bk-pg{background:#fff;border:1px solid var(--line);border-radius:6px;box-shadow:0 6px 18px -10px rgba(0,0,0,.4);margin:0 auto .4rem;max-width:640px;overflow:hidden}
+.bk-pg img{display:block;width:100%;height:auto}.bk-pg.doc{padding:1rem 1.1rem}.bk-pg h3{margin:0 0 .5rem;text-align:center}.bk-pg h5{margin:.7rem 0 .2rem}
+.bk-pg .bk-view{position:relative;width:100%;aspect-ratio:210/297;overflow:hidden}.bk-pg .bk-view>.bk-cv{position:absolute;left:0;top:0;transform-origin:0 0}
+.bk-cap{text-align:center;font-size:.76rem;color:var(--mut);margin-bottom:1rem}
+.nchip{display:inline-flex;align-items:center;gap:.25rem;padding:.1rem .55rem;border-radius:6px;font-size:.74rem;font-weight:700}
+.nchip.ncb{background:#DBEAFE;color:#1D4ED8}.nchip.ncy{background:#FDE68A;color:#78350F}.nchip.ncg{background:#DCFCE7;color:#166534}.nchip.ncr{background:#FEE2E2;color:#B91C1C}.nchip.npin{background:#FFE4E6;color:#BE123C;border:1px solid #FDA4AF}
+.nws .nlk{border-color:#2563EB;color:#1D4ED8;background:#fff}
+@media(max-width:520px){.nws .th{flex-basis:84px;height:62px}}
 .banner{width:100%;border-radius:14px;overflow:hidden;margin:0 0 1rem;box-shadow:var(--sh1,0 6px 20px -10px rgba(0,0,0,.35));background:#fff;line-height:0}.banner img{width:100%;height:auto;display:block;max-height:420px;object-fit:cover}
 /* certificate */
 .cwrap{width:100%;overflow:hidden;position:relative;border-radius:6px;box-shadow:0 6px 24px -10px rgba(0,0,0,.35)}
@@ -384,6 +424,13 @@ table.t tbody tr:hover{background:#F3FCF7}
 .fxrow{display:flex;align-items:center;justify-content:space-between;gap:.5rem;padding:.2rem 0;border-bottom:1px solid var(--line)}.fxmv{display:flex;gap:.25rem}
 .bracket .col h4{text-align:center;font-size:.85rem;color:var(--g800)}
 </style>
+<link rel="manifest" href="manifest.webmanifest">
+<meta name="theme-color" content="#065F46">
+<meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="ราชประชาเกมส์">
+<link rel="apple-touch-icon" href="icons/icon-192.png">
+<link rel="icon" type="image/png" href="icons/icon-192.png">
+<script src="config.js"></script>
 </head>
 <body>
 <div id="topbar"><b></b></div>
@@ -661,6 +708,7 @@ function icon(n) {
     home: '<path d="M3 11l9-8 9 8v9a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z"/>',
     cal: '<rect x="3" y="4" width="18" height="17" rx="2"/><path d="M8 2v4M16 2v4M3 10h18"/>',
     list: '<path d="M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01"/>',
+    news: '<path d="M4 4h13a1 1 0 0 1 1 1v14a2 2 0 0 0 2 2H6a2 2 0 0 1-2-2z"/><path d="M18 8h2a1 1 0 0 1 1 1v10a2 2 0 0 1-2 2M8 8h6M8 12h6M8 16h4"/>',
     users: '<circle cx="9" cy="8" r="3.5"/><path d="M2 20c0-3.5 3-6 7-6s7 2.5 7 6M17 4.5a3.5 3.5 0 0 1 0 7M22 20c0-3-2-5-5-5.7"/>',
     check: '<path d="M4 12l5 5L20 6"/>',
     trophy: '<path d="M8 4h8v6a4 4 0 0 1-8 0zM8 6H4v2a4 4 0 0 0 4 4M16 6h4v2a4 4 0 0 1-4 4M12 14v4M8 21h8M10 18h4"/>',
@@ -723,6 +771,7 @@ var SPLASH_LOGO = (document.querySelector('.sp-logo') || {}).src || '';
 function splashHtml(msg, err) {
   return '<div class="splash">' + (err ? '' : '<div class="sp-ring"><img class="sp-logo" alt="" src="' + SPLASH_LOGO + '"></div>') + '<div class="sp-txt">' + esc(msg) + '</div></div>';
 }
+var PUB_TAB_ICON = { score: 'trophy', results: 'flag', fix: 'bracket', sched: 'cal', cert: 'award' };
 async function renderPublic() {
   if (!S.pub) {
     $('#app').innerHTML = splashHtml(S.pubErr || 'กำลังโหลดข้อมูล...', !!S.pubErr);
@@ -741,11 +790,12 @@ async function renderPublic() {
     '<div style="min-width:0"><h1 class="hero-t">' + heroTitle(s.eventName) + '<span class="hl hp">ประจำปีการศึกษา ' + esc(s.academicYear) + '</span></h1><div class="hero-s">' + esc(s.schoolName) + '</div>' + (s.orgName ? '<div class="hero-s hero-o">' + esc(s.orgName) + '</div>' : '') + '</div></div>' +
     '<button class="btn btn-sun" onclick="loginModal()">เข้าสู่ระบบ</button></div>' +
     '<div class="meta" style="margin-top:1.1rem">' + meta.map(function (m) { return '<span>' + m + '</span>'; }).join('') + '</div></div></div>' +
-    '<div class="pub-body">' + bannerBoxHtml(s.bannerVer) + tickerHtml(s) + (s.announcement ? '<div class="notice">📢 ' + esc(s.announcement) + '</div>' : '') +
-    '<div class="tabs">' + tabs.map(function (t) { return '<a class="' + (S.pubTab === t[0] ? 'on' : '') + '" onclick="S.pubTab=\'' + t[0] + '\';renderPublic()">' + t[1] + '</a>'; }).join('') + '</div>' +
+    '<div class="pub-body">' + bannerBoxHtml(s.bannerVer) + tickerHtml(s) + (s.announcement ? '<div class="notice">📢 ' + esc(s.announcement) + '</div>' : '') + pubNewsHtml(p) +
+    '<div class="tabs">' + tabs.map(function (t) { return '<a class="' + (S.pubTab === t[0] ? 'on' : '') + '" onclick="S.pubTab=\'' + t[0] + '\';renderPublic();window.scrollTo(0,0)">' + icon(PUB_TAB_ICON[t[0]] || 'list') + '<span>' + t[1] + '</span></a>'; }).join('') + '</div>' +
     body + '<div class="c xs mut mt3">ข้อมูลอัปเดตอัตโนมัติ · ล่าสุด ' + esc(fmtDateTime(p.updatedAt)) + '</div></div>';
   if (S.pubTab === 'cert') drawPubCerts();
   if (s.bannerVer) loadBanner();
+  fillNewsImgs(false);
 }
 function pubScore(p) {
   if (!p.visible || !p.standings) return '<div class="card c" style="padding:2.5rem 1rem"><h3>ยังไม่เปิดเผยคะแนน</h3><p class="mut">คณะกรรมการจะประกาศผลคะแนนรวมในพิธีปิดการแข่งขัน โปรดติดตามต่อไป</p></div>';
@@ -768,6 +818,157 @@ function pubResults(p) {
       }).join('') + '</div>';
     }).join('');
   }).join('');
+}
+/* ===================== ข่าวสารประชาสัมพันธ์ ===================== */
+S.newsOpen = {};
+var NEWS_IMG = {}, NEWS_CATS = ['ข่าวประชาสัมพันธ์', 'กำหนดการแข่งขัน', 'ผลการแข่งขัน', 'ประกาศ'];
+function newsCatCls(c) { return c === 'กำหนดการแข่งขัน' ? 'ncy' : c === 'ผลการแข่งขัน' ? 'ncg' : c === 'ประกาศ' ? 'ncr' : 'ncb'; }
+async function newsImgMap(staff) {
+  var ver = settingsNow().newsVer || '', key = (staff ? 'a' : 'p') + ver;
+  if (NEWS_IMG[key]) return NEWS_IMG[key];
+  var r = null;
+  try { r = staff ? await api('getNewsImages') : await gsRun('getNewsImages'); } catch (e) { }
+  if (r && r.map) NEWS_IMG[key] = r.map;
+  return (r && r.map) || {};
+}
+async function fillNewsImgs(staff) {
+  var els = $$('.nws .th[data-img="1"]'); if (!els.length) return;
+  var map = await newsImgMap(staff);
+  $$('.nws .th[data-img="1"]').forEach(function (e) { var d = map[e.getAttribute('data-id')]; if (d) e.innerHTML = '<img src="' + esc(d) + '" alt="">'; });
+}
+function newsCardHtml(n, admin) {
+  var dt = n.date ? fmtDate(n.date) : fmtDateTime(n.createdAt), pin = n.pinned === 'true';
+  return '<div class="nws' + (pin ? ' pin' : '') + '"><div class="th" data-id="' + esc(n.id) + '" data-img="' + (n.hasImg === 'true' ? '1' : '') + '"><span class="nph">📰</span></div><div class="nb">' +
+    '<div class="row" style="gap:.4rem"><span class="nchip ' + newsCatCls(n.category) + '">' + esc(n.category) + '</span>' + (pin ? '<span class="nchip npin">📌 ปักหมุด</span>' : '') +
+    (admin && n.visible === 'false' ? '<span class="chip bad">ซ่อนอยู่</span>' : '') + '<span class="xs mut">' + icon('cal').replace('<svg', '<svg width="14" height="14" style="vertical-align:-2px"') + ' ' + esc(dt) + '</span></div>' +
+    '<h4>' + esc(n.title) + '</h4>' + (n.summary ? '<div class="ns">' + esc(n.summary) + '</div>' : '') +
+    ((n.link || admin || n.showSchedule === 'true' || n.showBooklet === 'true') ? '<div class="row mt1" style="gap:.4rem">' + (n.showBooklet === 'true' ? '<button class="btn btn-sm btn-primary" onclick="openBooklet()">📖 เปิดอ่านสูจิบัตร</button>' : '') + (n.showSchedule === 'true' ? '<button class="btn btn-sm" onclick="toggleNewsSched(\'' + n.id + '\')">' + icon('cal').replace('<svg', '<svg width="14" height="14" style="vertical-align:-2px"') + ' ' + (S.newsOpen[n.id] ? 'ซ่อนกำหนดการ' : 'ดูกำหนดการ') + '</button>' : '') + (n.link ? '<a class="btn btn-sm nlk" href="' + esc(n.link) + '" target="_blank" rel="noopener noreferrer">↗ เปิดลิงก์นำทาง</a>' : '') +
+      (admin ? '<button class="btn btn-sm" onclick="newsModal(\'' + n.id + '\')">แก้ไข</button><button class="btn btn-sm" onclick="delNews(\'' + n.id + '\')">ลบ</button>' : '') + '</div>' : '') +
+    (n.showSchedule === 'true' && S.newsOpen[n.id] ? newsSchedHtml(admin) : '') + '</div></div>';
+}
+function newsSchedHtml(admin) {
+  var evs = admin ? (S.d.events || []) : ((S.pub && S.pub.events) || []);
+  if (!evs.length) return '<div class="nsch xs mut">ยังไม่มีรายการแข่งขัน</div>';
+  var sg = scheduleGroups(evs);
+  return '<div class="nsch">' + sg.keys.map(function (k) {
+    return '<h5>' + (k ? fmtDate(k, true) : 'ยังไม่กำหนดวัน-เวลา') + '</h5><table>' + sg.g[k].map(function (e) { return '<tr><td>' + esc(e.time || '-') + '</td><td>' + esc(e.label || evLabel(e)) + '</td><td>' + esc(e.venue || '') + '</td></tr>'; }).join('') + '</table>';
+  }).join('') + '</div>';
+}
+/** อ่านสูจิบัตรแบบออนไลน์: ปกหน้า → กำหนดการพิธีเปิด → กำหนดการแข่งขัน → คณะสี → ปกหลัง */
+var BOOK_PUB = {};
+async function openBooklet() {
+  var admin = !!(S.sid && S.d), st = settingsNow(), data;
+  try {
+    if (admin) data = { front: await bookImg('front'), back: await bookImg('back'), opening: await bookOpening() };
+    else {
+      var key = [st.bookFrontVer, st.bookBackVer, st.bookOpenVer].join('|');
+      if (!BOOK_PUB[key]) BOOK_PUB[key] = await gsRun('getPublicBooklet');
+      data = BOOK_PUB[key];
+    }
+  } catch (e) { toast(cleanMsg(e), 'err'); return; }
+  var evs = admin ? S.d.events : (S.pub.events || []), cols = admin ? S.d.colors : (S.pub.colors || []);
+  var pg = [], cap = [];
+  var img = function (src) { return '<div class="bk-pg"><img src="' + esc(src) + '" alt=""></div>'; };
+  pg.push(data.front ? img(data.front) : '<div class="bk-pg"><div class="bk-view">' + bkDefCover('front') + '</div></div>'); cap.push('ปกหน้า');
+  (data.opening || []).forEach(function (x, i) { pg.push(img(x)); cap.push('กำหนดการพิธีเปิด หน้า ' + (i + 1)); });
+  if (evs.length) {
+    var sg = scheduleGroups(evs);
+    pg.push('<div class="bk-pg doc"><h3>กำหนดการแข่งขัน</h3>' + sg.keys.map(function (k) {
+      return '<h5>' + (k ? fmtDate(k, true) : 'ยังไม่กำหนดวัน-เวลา') + '</h5><div class="tw"><table class="t"><thead><tr><th>เวลา</th><th>รายการ</th><th>สถานที่</th></tr></thead><tbody>' +
+        sg.g[k].map(function (e) { return '<tr><td>' + esc(e.time || '-') + '</td><td>' + esc(e.label || evLabel(e)) + '</td><td>' + esc(e.venue || '-') + '</td></tr>'; }).join('') + '</tbody></table></div>';
+    }).join('') + '</div>'); cap.push('กำหนดการแข่งขัน');
+  }
+  if (cols.length) {
+    pg.push('<div class="bk-pg doc"><h3>คณะสี</h3><div class="tw"><table class="t"><thead><tr><th>สี</th><th>ครูที่ปรึกษา</th><th>คติพจน์</th></tr></thead><tbody>' + cols.map(function (c) {
+      return '<tr><td><span style="display:inline-block;width:12px;height:12px;border-radius:3px;background:' + esc(c.hex) + ';margin-right:6px;vertical-align:-1px"></span>' + esc(c.name) + '</td><td>' + esc(c.advisors || '-') + '</td><td>' + esc(c.motto || '-') + '</td></tr>';
+    }).join('') + '</tbody></table></div></div>'); cap.push('คณะสี');
+  }
+  pg.push(data.back ? img(data.back) : '<div class="bk-pg"><div class="bk-view">' + bkDefCover('back') + '</div></div>'); cap.push('ปกหลัง');
+  var ctl = modal({ title: 'สูจิบัตร ' + st.eventName + ' ปีการศึกษา ' + st.academicYear, wide: true,
+    body: pg.map(function (x, i) { return x + '<div class="bk-cap">' + esc(cap[i]) + ' · หน้า ' + (i + 1) + ' / ' + pg.length + '</div>'; }).join(''),
+    actions: [{ label: 'ปิด', close: true }] });
+  var fit = function () { $$('.bk-view', ctl.el).forEach(function (v) { var c = v.firstElementChild; if (c) c.style.transform = 'scale(' + (v.clientWidth / 793.7) + ')'; }); };
+  setTimeout(fit, 30); setTimeout(fit, 300);
+}
+function toggleNewsSched(id) { S.newsOpen[id] = !S.newsOpen[id]; if (S.sid && S.d) { render(); } else renderPublic(); }
+function pubNewsHtml(p) {
+  var list = p.news || []; if (!list.length) return '';
+  var shown = S.newsAll ? list : list.slice(0, 5);
+  return '<div class="card mb2"><div class="row" style="gap:.5rem"><b style="font-size:1.1rem;display:inline-flex;align-items:center;gap:.45rem">' + icon('news').replace('<svg', '<svg width="22" height="22"') + 'ข่าวสารประชาสัมพันธ์</b><span class="chip info">' + list.length + ' ข่าว</span></div>' +
+    shown.map(function (n) { return newsCardHtml(n, false); }).join('') +
+    (list.length > 5 ? '<div class="c mt1"><button class="btn btn-sm" onclick="S.newsAll=!S.newsAll;renderPublic()">' + (S.newsAll ? 'แสดงเฉพาะข่าวล่าสุด' : 'ดูข่าวทั้งหมด (' + list.length + ')') + '</button></div>' : '') + '</div>';
+}
+function vNews() {
+  var list = S.d.news || [];
+  return '<div class="row sp mb2"><span class="mut">ข่าวที่เปิดแสดงจะขึ้นที่หน้าหลักของเว็บ (ข่าวปักหมุดอยู่บนสุด)</span><button class="btn btn-primary" onclick="newsModal()">+ เพิ่มข่าว</button></div>' +
+    (list.length ? list.map(function (n) { return newsCardHtml(n, true); }).join('') : '<div class="card empty">ยังไม่มีข่าวประชาสัมพันธ์</div>');
+}
+function newsPost() { fillNewsImgs(true); }
+var NEWS_DRAFT = {};
+function drawNewsDraft() {
+  var el = $('#nws_prev'), del = $('#nws_del'); if (!el) return;
+  var d = NEWS_DRAFT.image;
+  el.innerHTML = d ? '<img src="' + esc(d) + '" alt="" style="width:100%;height:100%;object-fit:cover">' : '<span class="xs mut">ยังไม่มีภาพ</span>';
+  if (del) del.style.display = d ? '' : 'none';
+}
+function pickNewsImg(inp) {
+  var f = inp.files && inp.files[0]; inp.value = ''; if (!f) return;
+  if (!/^image\/(png|jpeg|webp)$/.test(f.type)) { toast('รองรับเฉพาะไฟล์ PNG/JPG/WebP', 'err'); return; }
+  var rd = new FileReader();
+  rd.onload = function () {
+    var img = new Image();
+    img.onload = function () {
+      var out = '', sizes = [[480, 320], [360, 240], [270, 180]], R = 3 / 2;
+      var sw = img.width, sh = img.height, cw = sw / sh > R ? sh * R : sw, ch = sw / sh > R ? sh : sw / R, cx0 = (sw - cw) / 2, cy0 = (sh - ch) / 2;   // ครอบกลางภาพอัตราส่วน 3:2
+      for (var i = 0; i < sizes.length && !out; i++) {
+        var cv = document.createElement('canvas'); cv.width = sizes[i][0]; cv.height = sizes[i][1];
+        var cx = cv.getContext('2d'); cx.fillStyle = '#fff'; cx.fillRect(0, 0, cv.width, cv.height); cx.drawImage(img, cx0, cy0, cw, ch, 0, 0, cv.width, cv.height);
+        [0.82, 0.7, 0.58, 0.46].some(function (q) { var jp = cv.toDataURL('image/jpeg', q); if (jp.length <= 45000) { out = jp; return true; } return false; });
+      }
+      if (!out) { toast('ภาพซับซ้อนเกินไป กรุณาใช้ภาพที่เล็กลง', 'err'); return; }
+      NEWS_DRAFT.image = out; drawNewsDraft();
+    };
+    img.onerror = function () { toast('เปิดไฟล์ภาพไม่ได้', 'err'); };
+    img.src = rd.result;
+  };
+  rd.readAsDataURL(f);
+}
+async function newsModal(id) {
+  var n = id ? (S.d.news || []).filter(function (x) { return x.id === id; })[0] : null;
+  if (id && !n) return;
+  NEWS_DRAFT = { image: undefined };
+  if (n && n.hasImg === 'true') { var map = await newsImgMap(true); NEWS_DRAFT.image = map[id] || undefined; NEWS_DRAFT.orig = NEWS_DRAFT.image; }
+  var vals = n ? Object.assign({}, n, { visible: n.visible !== 'false', showSchedule: n.showSchedule === 'true', showBooklet: n.showBooklet === 'true' }) : { category: NEWS_CATS[0], visible: true, pinned: false };
+  formModal({
+    title: n ? 'แก้ไขข่าว' : 'เพิ่มข่าวประชาสัมพันธ์', wide: true,
+    fields: [
+      { k: 'title', label: 'หัวข้อข่าว', req: 1, full: 1 },
+      { k: 'summary', label: 'รายละเอียดโดยย่อ', type: 'textarea', full: 1, ph: 'ข้อความสั้น ๆ ที่จะแสดงใต้หัวข้อ' },
+      { k: 'category', label: 'หมวดข่าว', attrs: 'list="nwscats"', hint: 'เลือกหรือพิมพ์เอง' },
+      { k: 'date', label: 'วันที่แสดง', type: 'date', hint: 'เว้นว่าง = ใช้วันเวลาที่สร้างข่าว' },
+      { k: 'link', label: 'ลิงก์ (ถ้ามี)', full: 1, ph: 'https://…', hint: 'จะแสดงปุ่ม "เปิดลิงก์นำทาง"' },
+      { k: 'pinned', label: 'ปักหมุดไว้บนสุด', type: 'check' }, { k: 'visible', label: 'แสดงบนหน้าหลัก', type: 'check' },
+      { k: 'showBooklet', label: 'แสดงสูจิบัตรในข่าวนี้ (มีปุ่ม "เปิดอ่านสูจิบัตร" ดูได้ตั้งแต่ปกหน้าถึงปกหลัง)', type: 'check', full: 1 },
+      { k: 'showSchedule', label: 'แสดงกำหนดการแข่งขันในข่าวนี้ (มีปุ่ม "ดูกำหนดการ")', type: 'check', full: 1 }
+    ],
+    values: vals,
+    post: '<datalist id="nwscats">' + NEWS_CATS.map(function (c) { return '<option value="' + esc(c) + '">'; }).join('') + '</datalist>' +
+      '<div class="mt2"><label class="lbl">ภาพประกอบข่าว</label><div class="row" style="gap:.8rem;align-items:flex-start"><div id="nws_prev" style="width:150px;height:100px;border-radius:10px;border:2px dashed var(--g300);display:grid;place-items:center;overflow:hidden;background:#fff"></div>' +
+      '<div><label class="btn btn-sm" style="cursor:pointer">เลือกภาพ<input type="file" accept="image/png,image/jpeg,image/webp" class="hide" onchange="pickNewsImg(this)"></label> <button class="btn btn-sm" type="button" id="nws_del" onclick="NEWS_DRAFT.image=\'\';drawNewsDraft()">ลบภาพ</button>' +
+      '<div class="hint">ระบบครอบภาพสัดส่วน 3:2 และย่อขนาดให้อัตโนมัติ</div></div></div></div>',
+    onSubmit: function (v) {
+      if (id) v.id = id;
+      if (NEWS_DRAFT.image !== NEWS_DRAFT.orig) v.image = NEWS_DRAFT.image || '';   // ส่งภาพเฉพาะเมื่อมีการเปลี่ยน
+      return act('saveNews', [v], 'บันทึกข่าวแล้ว');
+    }
+  });
+  setTimeout(drawNewsDraft, 0);
+}
+async function delNews(id) {
+  var n = (S.d.news || []).filter(function (x) { return x.id === id; })[0]; if (!n) return;
+  if (await confirmBox('ลบข่าว', 'ต้องการลบข่าว <b>' + esc(n.title) + '</b> ใช่หรือไม่?', 'ลบ', true)) {
+    try { await act('deleteNews', [id], 'ลบข่าวแล้ว'); } catch (e) { if (cleanMsg(e) !== 'handled') toast(cleanMsg(e), 'err'); }
+  }
 }
 function scheduleGroups(events) {
   var g = {}, keys = [];
@@ -851,14 +1052,24 @@ async function init() {
   await loadPublic(); renderPublic();
 }
 /* ===================== APP SHELL ===================== */
-var TITLES = { dashboard: 'ภาพรวมระบบ', scoreboard: 'คะแนนรวมและเหรียญ', results: 'บันทึกผลการแข่งขัน', register: 'ลงทะเบียนนักกีฬา', events: 'รายการแข่งขัน', fixtures: 'จับคู่และตารางแข่ง', certs: 'เกียรติบัตร', seasons: 'ปีการศึกษา', schedule: 'กำหนดการแข่งขัน', students: 'รายชื่อนักเรียน', colors: 'สีและคณะสี', users: 'ผู้ใช้งานระบบ', settings: 'ตั้งค่าระบบ' };
+var TITLES = { dashboard: 'ภาพรวมระบบ', scoreboard: 'คะแนนรวมและเหรียญ', results: 'บันทึกผลการแข่งขัน', register: 'ลงทะเบียนนักกีฬา', events: 'รายการแข่งขัน', fixtures: 'จับคู่และตารางแข่ง', certs: 'เกียรติบัตร', news: 'ข่าวประชาสัมพันธ์', booklet: 'สูจิบัตร', seasons: 'ปีการศึกษา', schedule: 'กำหนดการแข่งขัน', students: 'รายชื่อนักเรียน', colors: 'สีและคณะสี', users: 'ผู้ใช้งานระบบ', settings: 'ตั้งค่าระบบ' };
 function navItems() {
   var a = [['dashboard', 'home'], ['scoreboard', 'trophy'], ['results', 'flag'], ['register', 'check'], ['events', 'list'], ['fixtures', 'bracket'], ['schedule', 'cal'], ['students', 'users'], ['colors', 'flag']];
   if (S.user.role === 'colorHead') a = a.filter(function (i) { return ['results', 'fixtures', 'colors'].indexOf(i[0]) === -1; });
   if (S.user.role === 'admin') a.push(['users', 'key'], ['seasons', 'cal']);
   if (isStaff()) a.push(['certs', 'award']);
+  if (isStaff()) a.push(['booklet', 'list']);
+  if (isStaff()) a.push(['news', 'news']);
   if (isStaff()) a.push(['settings', 'cog']);
   return a;
+}
+var BNAV_SHORT = { dashboard: 'ภาพรวม', scoreboard: 'คะแนน', results: 'บันทึกผล', register: 'ลงทะเบียน', events: 'รายการ', fixtures: 'ตารางแข่ง', schedule: 'กำหนดการ', students: 'นักเรียน', colors: 'สี' };
+/** แถบเมนูด้านล่าง (โทรศัพท์/แท็บเล็ต): 4 เมนูแรก + ปุ่ม "เมนู" เปิดรายการทั้งหมด */
+function bnavHtml(items) {
+  var top = items.slice(0, 4), inTop = top.some(function (i) { return i[0] === S.view; });
+  return '<nav class="bnav">' + top.map(function (i) {
+    return '<a class="' + (S.view === i[0] ? 'on' : '') + '" onclick="go(\'' + i[0] + '\')">' + icon(i[1]) + '<span>' + esc(BNAV_SHORT[i[0]] || TITLES[i[0]]) + '</span></a>';
+  }).join('') + '<a class="' + (inTop ? '' : 'on') + '" onclick="S.navOpen=true;render()">' + icon('menu') + '<span>เมนู</span></a></nav>';
 }
 function vs(k) { return S.vs[k] || (S.vs[k] = {}); }
 function go(v, p) { S.view = v; if (p) S.vs[v] = Object.assign(S.vs[v] || {}, p); S.navOpen = false; render(); window.scrollTo(0, 0); }
@@ -873,10 +1084,10 @@ function render() {
     '</nav></aside><main class="main"><div class="top"><div class="row"><button class="btn menu-btn btn-icon" onclick="S.navOpen=true;render()" aria-label="เมนู">' + icon('menu').replace('<svg', '<svg width="20" height="20"') + '</button><h2>' + TITLES[S.view] + '</h2></div>' +
     '<div class="row"><span class="sm" style="text-align:right"><b>' + esc(S.user.fullname) + '</b><br><span class="mut xs">' + esc(ROLE_LABEL[S.user.role] || '') + (S.user.colorId && S.cm[S.user.colorId] ? ' · ' + esc(S.cm[S.user.colorId].name) : '') + '</span></span>' +
     '<button class="btn btn-sm" onclick="changePwModal()">' + icon('key').replace('<svg', '<svg width="15" height="15"') + 'รหัสผ่าน</button><button class="btn btn-sm" onclick="doLogout()">' + icon('out').replace('<svg', '<svg width="15" height="15"') + 'ออกจากระบบ</button></div></div>' +
-    '<div id="view"></div></main></div>';
-  var fn = { dashboard: vDashboard, scoreboard: vScoreboard, results: vResults, register: vRegister, events: vEvents, fixtures: vFixtures, certs: vCerts, seasons: vSeasons, schedule: vSchedule, students: vStudents, colors: vColors, users: vUsers, settings: vSettings }[S.view];
+    '<div id="view"></div></main></div>' + bnavHtml(items);
+  var fn = { dashboard: vDashboard, scoreboard: vScoreboard, results: vResults, register: vRegister, events: vEvents, fixtures: vFixtures, certs: vCerts, news: vNews, booklet: vBooklet, seasons: vSeasons, schedule: vSchedule, students: vStudents, colors: vColors, users: vUsers, settings: vSettings }[S.view];
   $('#view').innerHTML = fn();
-  var post = { settings: drawLogoPrev, events: drawEvents, fixtures: drawFixtures, students: drawStudents, register: drawRegister, results: drawResults, certs: certsPost }[S.view];
+  var post = { settings: drawLogoPrev, events: drawEvents, fixtures: drawFixtures, students: drawStudents, register: drawRegister, results: drawResults, certs: certsPost, booklet: bookletPost, news: newsPost }[S.view];
   if (post) post();
 }
 
@@ -963,13 +1174,14 @@ function vSchedule() {
         sg.g[k].map(function (e) { return '<tr><td>' + esc(e.time || '-') + '</td><td><b>' + esc(evLabel(e)) + '</b><div class="xs mut">' + esc(e.category) + '</div></td><td>' + esc(e.venue || '-') + '</td><td>' + statusChip(e.status) + '</td><td class="r">' + (isStaff() ? '<button class="btn btn-sm" onclick="eventModal(\'' + e.id + '\')">แก้ไข</button>' : '') + '</td></tr>'; }).join('') + '</tbody></table></div></div>';
     }).join('');
 }
-function printSchedule() {
+function scheduleHtml() {
   var sg = scheduleGroups(S.d.events);
-  printDoc('กำหนดการแข่งขัน', sg.keys.map(function (k, i) {
+  return sg.keys.map(function (k, i) {
     return '<h3 class="' + (i ? '' : '') + '">' + (k ? fmtDate(k, true) : 'ยังไม่กำหนดวัน-เวลา') + '</h3><table><thead><tr><th style="width:12%">เวลา</th><th>รายการ</th><th style="width:26%">สถานที่</th></tr></thead><tbody>' +
       sg.g[k].map(function (e) { return '<tr><td class="c">' + esc(e.time || '') + '</td><td>' + esc(evLabel(e)) + '</td><td>' + esc(e.venue || '') + '</td></tr>'; }).join('') + '</tbody></table>';
-  }).join(''));
+  }).join('');
 }
+function printSchedule() { printDoc('กำหนดการแข่งขัน', scheduleHtml()); }
 
 /* ===================== EVENTS ===================== */
 function vEvents() {
@@ -2509,6 +2721,224 @@ var SET_FIELDS = [
   { k: 'publicScoreVisible', label: 'แสดงคะแนนและผลการแข่งขันบนหน้าสาธารณะ (ปิดไว้เพื่อลุ้นก่อนประกาศผล)', type: 'check', full: 1 },
   { k: 'publicShowNames', label: 'แสดงชื่อนักกีฬาในผลการแข่งขันบนหน้าสาธารณะ', type: 'check', full: 1, hint: 'ค่าเริ่มต้นปิด เพื่อความเป็นส่วนตัวของนักเรียน — หน้านี้เปิดดูได้โดยไม่ต้องเข้าสู่ระบบ' }
 ];
+/* ===================== สูจิบัตร (ปกหน้า/ปกหลัง + พิมพ์เป็นเล่ม) ===================== */
+var BOOK_CACHE = {};
+var BOOK_KIND = { front: { key: 'bookFrontVer', label: 'ปกหน้า' }, back: { key: 'bookBackVer', label: 'ปกหลัง' } };
+async function bookImg(kind) {
+  var ver = (S.d.settings || {})[BOOK_KIND[kind].key];
+  if (!ver) return '';
+  var ck = kind + ver;
+  if (!BOOK_CACHE[ck]) { try { var r = await api('getBookCover', kind); if (r && r.data) BOOK_CACHE[ck] = r.data; } catch (e) { } }
+  return BOOK_CACHE[ck] || '';
+}
+/** ปกมาตรฐาน (ใช้เมื่อยังไม่ได้อัปโหลดภาพปก) */
+function bkDefCover(kind) {
+  var s = settingsNow(), h = '<div class="bk-cv bk-def"><div class="in">';
+  if (s.logoUrl) h += '<img class="lg" src="' + esc(s.logoUrl) + '" alt="">';
+  if (kind === 'front') {
+    var dt = s.startDate ? fmtDate(s.startDate) + (s.endDate && s.endDate !== s.startDate ? ' – ' + fmtDate(s.endDate) : '') : '';
+    h += (s.orgName ? '<div class="o">' + esc(s.orgName) + '</div>' : '') + '<div class="sc">' + esc(s.schoolName) + '</div><div class="t">สูจิบัตร</div><div class="e">' +
+      esc(s.eventName).replace(/\n/g, '<br>') + '</div><div class="y">ประจำปีการศึกษา ' + esc(s.academicYear) + '</div>' +
+      (dt || s.venue ? '<div class="d">' + esc(dt) + (dt && s.venue ? '<br>' : '') + esc(s.venue) + '</div>' : '');
+  } else {
+    h += '<div class="sc">' + esc(s.schoolName) + '</div>' + (s.orgName ? '<div class="o">' + esc(s.orgName) + '</div>' : '') +
+      '<div class="y">สูจิบัตร' + esc(s.eventName).replace(/\n/g, ' ') + ' ประจำปีการศึกษา ' + esc(s.academicYear) + '</div>';
+  }
+  return h + '</div></div>';
+}
+function bkCoverHtml(kind, img, extra) {
+  var cls = 'bk-cv' + (extra ? ' ' + extra : '');
+  if (img) return '<div class="' + cls + '"><img class="bk-img" src="' + esc(img) + '" alt=""></div>';
+  return bkDefCover(kind).replace('class="bk-cv bk-def"', 'class="' + cls + ' bk-def"');
+}
+function vBooklet() {
+  var v = vs('booklet'), st = S.d.settings;
+  if (v.init === undefined) { v.init = 1; v.fr = 1; v.op = 1; v.sch = 1; v.col = 1; v.ros = 0; v.bk = 1; }
+  if (v.op === undefined) v.op = 1;
+  var slot = function (kind) {
+    var k = BOOK_KIND[kind], has = !!st[k.key];
+    return '<div style="width:210px"><div class="lbl">' + k.label + '</div><div id="bkprev_' + kind + '"></div>' +
+      '<div class="row mt1" style="gap:.4rem"><label class="btn btn-sm btn-primary" style="cursor:pointer">อัปโหลด' + k.label + '<input type="file" accept="image/png,image/jpeg,image/webp" class="hide" onchange="pickBookCover(this,\'' + kind + '\')"></label>' +
+      (has ? '<button class="btn btn-sm" type="button" onclick="removeBookCover(\'' + kind + '\')">ลบภาพ</button>' : '') + '</div>' +
+      '<div class="xs mut mt1">' + (has ? 'ใช้ภาพที่อัปโหลด' : 'ยังไม่อัปโหลด — ใช้ปกมาตรฐานของระบบ') + '</div></div>';
+  };
+  var chk = function (k, label) { return '<label style="display:flex;gap:.5rem;align-items:center;cursor:pointer"><input type="checkbox" ' + (v[k] ? 'checked ' : '') + 'onchange="vs(\'booklet\').' + k + '=this.checked?1:0"> ' + label + '</label>'; };
+  return '<div class="card mb2"><h3 class="mb1">ปกสูจิบัตร</h3><div class="row" style="gap:2rem;align-items:flex-start">' + slot('front') + slot('back') + '</div>' +
+    '<div class="hint mt2">ภาพแนวตั้งขนาด A4 (สัดส่วน 210 × 297 เช่น 2480 × 3508 พิกเซล) รองรับ PNG/JPG/WebP ระบบย่อขนาดและบันทึกให้ทันที ภาพที่สัดส่วนไม่ตรงจะถูกครอบให้เต็มหน้า ถ้าไม่อัปโหลดจะใช้ปกมาตรฐานที่สร้างจากชื่องาน/โลโก้ในหน้าตั้งค่า</div></div>' +
+    '<div class="card mb2"><h3 class="mb1">กำหนดการพิธีเปิด (ไฟล์ PDF)</h3><div id="bkopen" class="row" style="gap:.6rem;align-items:flex-start"></div>' +
+    '<div class="row mt1" style="gap:.4rem"><label class="btn btn-sm btn-primary" style="cursor:pointer">อัปโหลดไฟล์ PDF<input type="file" accept="application/pdf,.pdf,image/png,image/jpeg,image/webp" multiple class="hide" onchange="pickBookOpening(this)"></label>' +
+    (st.bookOpenVer ? '<button class="btn btn-sm" type="button" onclick="removeBookOpening()">ลบไฟล์</button>' : '') + '</div>' +
+    '<div class="hint mt1">อัปโหลดไฟล์ PDF ขนาด A4 (สูงสุด ' + 12 + ' หน้า) ระบบแปลงเป็นภาพรายหน้าและพิมพ์ต่อจากปกหน้าแบบเต็มหน้ากระดาษ ต้องเชื่อมต่ออินเทอร์เน็ตตอนอัปโหลดเพื่อโหลดตัวอ่าน PDF หรือจะเลือกไฟล์ภาพ PNG/JPG หลายไฟล์ (เรียงตามชื่อไฟล์) แทนก็ได้</div></div>' +
+    '<div class="card"><h3 class="mb1">พิมพ์สูจิบัตร</h3><div class="grid g3 mb2" style="gap:.6rem">' +
+    chk('fr', 'ปกหน้า') + chk('op', 'กำหนดการพิธีเปิด (ไฟล์ PDF ที่อัปโหลด)') + chk('sch', 'กำหนดการแข่งขัน') + chk('col', 'คณะสี / ครูที่ปรึกษา / คติพจน์') + chk('ros', 'บัญชีรายชื่อนักกีฬาของแต่ละสี') + chk('bk', 'ปกหลัง') + '</div>' +
+    '<div class="row"><button class="btn btn-primary" onclick="printBooklet()">พิมพ์ / บันทึกเป็น PDF</button></div>' +
+    '<div class="hint mt1">เลือกขนาดกระดาษ A4 แนวตั้ง และติ๊ก "กราฟิกพื้นหลัง" (Background graphics) ในหน้าต่างพิมพ์ เพื่อให้ปกเต็มหน้า แนะนำให้ใช้ Google Chrome ปกจะพิมพ์เต็มขอบกระดาษ ส่วนเนื้อหาเว้นขอบตามปกติ</div></div>';
+}
+function bookletPost() { drawBookPrev('front'); drawBookPrev('back'); drawBookOpen(); }
+async function drawBookPrev(kind) {
+  var el = $('#bkprev_' + kind); if (!el) return;
+  var img = '';
+  if (S.d.settings[BOOK_KIND[kind].key]) {
+    el.innerHTML = '<div class="bk-thumb"><div class="empty xs" style="padding:1.2rem">กำลังโหลด…</div></div>';
+    img = await bookImg(kind);
+  }
+  el = $('#bkprev_' + kind); if (el) el.innerHTML = '<div class="bk-thumb">' + bkCoverHtml(kind, img) + '</div>';
+}
+function pickBookCover(inp, kind) {
+  var f = inp.files && inp.files[0]; inp.value = ''; if (!f) return;
+  if (!/^image\/(png|jpeg|webp)$/.test(f.type)) { toast('รองรับเฉพาะไฟล์ PNG/JPG/WebP', 'err'); return; }
+  var rd = new FileReader();
+  rd.onload = function () {
+    var img = new Image();
+    img.onload = async function () {
+      var widths = [1240, 1050, 900, 750, 600], qs = [0.88, 0.78, 0.66, 0.52], out = '';
+      for (var i = 0; i < widths.length && !out; i++) {
+        var sc = Math.min(1, widths[i] / img.width), cv = document.createElement('canvas');
+        cv.width = Math.max(1, Math.round(img.width * sc)); cv.height = Math.max(1, Math.round(img.height * sc));
+        var cx = cv.getContext('2d'); cx.fillStyle = '#fff'; cx.fillRect(0, 0, cv.width, cv.height); cx.drawImage(img, 0, 0, cv.width, cv.height);
+        for (var j = 0; j < qs.length; j++) { var jp = cv.toDataURL('image/jpeg', qs[j]); if (jp.length <= 650000) { out = jp; break; } }
+      }
+      if (!out) { toast('ภาพซับซ้อนเกินไป กรุณาใช้ภาพที่เล็กลง', 'err'); return; }
+      if (Math.abs(img.width / img.height - 210 / 297) > 0.08) toast('ภาพไม่ใช่สัดส่วน A4 แนวตั้ง ระบบจะครอบภาพให้เต็มหน้า');
+      try {
+        var r = await api('saveBookCover', kind, out);
+        if (r && r.ver) BOOK_CACHE[kind + r.ver] = out;
+        await reload(); toast('อัปโหลด' + BOOK_KIND[kind].label + 'แล้ว'); render();
+      } catch (e) { if (cleanMsg(e) !== 'handled') toast(cleanMsg(e), 'err'); }
+    };
+    img.onerror = function () { toast('เปิดไฟล์ภาพไม่ได้', 'err'); };
+    img.src = rd.result;
+  };
+  rd.readAsDataURL(f);
+}
+function removeBookCover(kind) {
+  confirmBox('ลบภาพ' + BOOK_KIND[kind].label, 'ต้องการลบภาพ' + BOOK_KIND[kind].label + 'สูจิบัตร และกลับไปใช้ปกมาตรฐานของระบบใช่หรือไม่', 'ลบ', true).then(async function (ok) {
+    if (!ok) return;
+    try { await act('saveBookCover', [kind, ''], 'ลบภาพ' + BOOK_KIND[kind].label + 'แล้ว'); } catch (e) { if (cleanMsg(e) !== 'handled') toast(cleanMsg(e), 'err'); }
+  });
+}
+var PDFJS_URL = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js', PDFJS_WORKER = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+function loadPdfJs() {
+  return new Promise(function (res, rej) {
+    if (window.pdfjsLib) { res(window.pdfjsLib); return; }
+    var sc = document.createElement('script'); sc.src = PDFJS_URL;
+    sc.onload = function () { try { window.pdfjsLib.GlobalWorkerOptions.workerSrc = PDFJS_WORKER; res(window.pdfjsLib); } catch (e) { rej(e); } };
+    sc.onerror = function () { rej(new Error('โหลดตัวอ่าน PDF ไม่ได้ กรุณาตรวจสอบอินเทอร์เน็ต หรืออัปโหลดเป็นไฟล์ภาพแทน')); };
+    document.head.appendChild(sc);
+  });
+}
+/** ย่อภาพ/canvas เป็น JPEG ให้ไม่เกินขนาดที่กำหนด (วาดบนพื้นขาว) */
+function bkJpeg(src, w0, h0) {
+  var widths = [1240, 1050, 900, 750, 600], qs = [0.85, 0.75, 0.62, 0.5];
+  for (var i = 0; i < widths.length; i++) {
+    var sc = Math.min(1, widths[i] / w0), cv = document.createElement('canvas');
+    cv.width = Math.max(1, Math.round(w0 * sc)); cv.height = Math.max(1, Math.round(h0 * sc));
+    var cx = cv.getContext('2d'); cx.fillStyle = '#fff'; cx.fillRect(0, 0, cv.width, cv.height); cx.drawImage(src, 0, 0, cv.width, cv.height);
+    for (var j = 0; j < qs.length; j++) { var jp = cv.toDataURL('image/jpeg', qs[j]); if (jp.length <= 600000) return jp; }
+  }
+  return '';
+}
+function bkReadImage(f) {
+  return new Promise(function (res, rej) {
+    var rd = new FileReader();
+    rd.onload = function () { var im = new Image(); im.onload = function () { res(bkJpeg(im, im.width, im.height)); }; im.onerror = function () { rej(new Error('เปิดไฟล์ภาพไม่ได้')); }; im.src = rd.result; };
+    rd.onerror = function () { rej(new Error('อ่านไฟล์ไม่ได้')); };
+    rd.readAsDataURL(f);
+  });
+}
+async function bkReadPdf(f) {
+  var lib = await loadPdfJs(), pdf = await lib.getDocument({ data: await f.arrayBuffer() }).promise, out = [];
+  if (pdf.numPages > 12) throw new Error('ไฟล์ PDF มี ' + pdf.numPages + ' หน้า รองรับสูงสุด 12 หน้า');
+  for (var p = 1; p <= pdf.numPages; p++) {
+    var page = await pdf.getPage(p), v1 = page.getViewport({ scale: 1 }), vp = page.getViewport({ scale: 1240 / v1.width });
+    var cv = document.createElement('canvas'); cv.width = Math.round(vp.width); cv.height = Math.round(vp.height);
+    var cx = cv.getContext('2d'); cx.fillStyle = '#fff'; cx.fillRect(0, 0, cv.width, cv.height);
+    await page.render({ canvasContext: cx, viewport: vp }).promise;
+    var jp = bkJpeg(cv, cv.width, cv.height);
+    if (!jp) throw new Error('หน้า ' + p + ' ซับซ้อนเกินไป กรุณาลดขนาดไฟล์');
+    out.push(jp);
+  }
+  return out;
+}
+async function pickBookOpening(inp) {
+  var files = [].slice.call(inp.files || []); inp.value = ''; if (!files.length) return;
+  try {
+    var pages = [];
+    var pdfs = files.filter(function (f) { return /pdf$/i.test(f.type) || /\.pdf$/i.test(f.name); });
+    if (pdfs.length && pdfs.length !== files.length) { toast('กรุณาเลือกไฟล์ PDF อย่างเดียว หรือไฟล์ภาพอย่างเดียว', 'err'); return; }
+    if (pdfs.length > 1) { toast('อัปโหลด PDF ได้ครั้งละ 1 ไฟล์', 'err'); return; }
+    toast('กำลังแปลงไฟล์ กรุณารอสักครู่…'); tbar(1);
+    try {
+      if (pdfs.length) pages = await bkReadPdf(pdfs[0]);
+      else {
+        files.sort(function (a, b) { return a.name.localeCompare(b.name, 'th', { numeric: true }); });
+        if (files.length > 12) throw new Error('รองรับสูงสุด 12 หน้า');
+        for (var i = 0; i < files.length; i++) {
+          if (!/^image\/(png|jpeg|webp)$/.test(files[i].type)) throw new Error('รองรับเฉพาะไฟล์ PDF หรือภาพ PNG/JPG/WebP');
+          var jp = await bkReadImage(files[i]); if (!jp) throw new Error('ภาพ ' + files[i].name + ' ซับซ้อนเกินไป'); pages.push(jp);
+        }
+      }
+    } finally { tbar(-1); }
+    var r = await api('saveBookOpening', pages);
+    if (r && r.ver) BOOK_CACHE['open' + r.ver] = pages;
+    await reload(); toast('อัปโหลดกำหนดการพิธีเปิดแล้ว ' + pages.length + ' หน้า'); render();
+  } catch (e) { if (cleanMsg(e) !== 'handled') toast(cleanMsg(e), 'err'); }
+}
+function removeBookOpening() {
+  confirmBox('ลบไฟล์กำหนดการพิธีเปิด', 'ต้องการลบไฟล์กำหนดการพิธีเปิดออกจากสูจิบัตรใช่หรือไม่', 'ลบ', true).then(async function (ok) {
+    if (!ok) return;
+    try { await act('saveBookOpening', [[]], 'ลบไฟล์กำหนดการพิธีเปิดแล้ว'); } catch (e) { if (cleanMsg(e) !== 'handled') toast(cleanMsg(e), 'err'); }
+  });
+}
+async function bookOpening() {
+  var ver = S.d.settings.bookOpenVer; if (!ver) return [];
+  if (!BOOK_CACHE['open' + ver]) { try { var r = await api('getBookOpening'); if (r && r.pages) BOOK_CACHE['open' + ver] = r.pages; } catch (e) { } }
+  return BOOK_CACHE['open' + ver] || [];
+}
+async function drawBookOpen() {
+  var el = $('#bkopen'); if (!el) return;
+  if (!S.d.settings.bookOpenVer) { el.innerHTML = '<span class="xs mut">ยังไม่ได้อัปโหลด — จะไม่พิมพ์หน้ากำหนดการพิธีเปิด</span>'; return; }
+  el.innerHTML = '<span class="xs mut">กำลังโหลด…</span>';
+  var pg = await bookOpening(); el = $('#bkopen'); if (!el) return;
+  el.innerHTML = pg.length ? pg.map(function (x, i) { return '<div style="text-align:center"><img src="' + esc(x) + '" alt="" style="width:100px;border:1px solid var(--line);border-radius:4px;display:block"><span class="xs mut">หน้า ' + (i + 1) + '</span></div>'; }).join('') : '<span class="xs mut">โหลดภาพไม่สำเร็จ</span>';
+}
+function bkColorsHtml() {
+  return '<table><thead><tr><th style="width:22%">สี</th><th>ครูที่ปรึกษา / หัวหน้าสี</th><th style="width:34%">คติพจน์</th></tr></thead><tbody>' +
+    S.d.colors.map(function (c) {
+      return '<tr><td><span style="display:inline-block;width:4mm;height:4mm;background:' + esc(c.hex) + ';border:.3mm solid #000;vertical-align:middle;margin-right:2mm;-webkit-print-color-adjust:exact;print-color-adjust:exact"></span>' + esc(c.name) + '</td><td>' + esc(c.advisors || '') + '</td><td>' + esc(c.motto || '') + '</td></tr>';
+    }).join('') + '</tbody></table>';
+}
+function bkRosterHtml(c) {
+  var h = '', n = 0;
+  S.d.events.filter(function (e) { return e.mode !== 'color'; }).forEach(function (e) {
+    var l = studentsOf(e.id, c.id); if (!l.length) return; n++;
+    h += '<h3>' + esc(evLabel(e)) + ' (' + l.length + ' คน)</h3>' + rosterTable(l);
+  });
+  return n ? h : '<p class="c">ยังไม่มีการลงทะเบียน</p>';
+}
+async function printBooklet() {
+  var v = vs('booklet'), s = S.d.settings;
+  var head = function (t) { return '<div class="ph bkh"><h1>' + esc(t) + '</h1><h2>กีฬาภายในต้านภัยยาเสพติด</h2><h2>' + esc(s.eventName + ' ประจำปีการศึกษา ' + s.academicYear) + '</h2><h2 style="font-weight:700">' + esc(s.schoolName) + '</h2></div>'; };
+  var secs = [];
+  if (v.sch) secs.push(head('กำหนดการแข่งขัน') + scheduleHtml());
+  if (v.col) secs.push(head('คณะสี') + bkColorsHtml());
+  if (v.ros) S.d.colors.forEach(function (c) { secs.push(head('บัญชีรายชื่อนักกีฬา ' + c.name + (c.advisors ? ' (ครูที่ปรึกษา: ' + c.advisors + ')' : '')) + bkRosterHtml(c)); });
+  if (!v.fr && !v.bk && !secs.length && !(v.op && S.d.settings.bookOpenVer)) { toast('กรุณาเลือกส่วนที่ต้องการพิมพ์อย่างน้อย 1 ส่วน', 'err'); return; }
+  var front = v.fr ? await bookImg('front') : '', back = v.bk ? await bookImg('back') : '';
+  var opens = v.op ? await bookOpening() : [];
+  var h = '<div class="bk">' + (v.fr ? bkCoverHtml('front', front) : '') +
+    opens.map(function (x) { return '<div class="bk-cv bk-pdf"><img class="bk-img" src="' + esc(x) + '" alt=""></div>'; }).join('') +
+    (secs.length ? '<div class="pr">' + secs.map(function (x, i) { return '<div class="' + (i ? 'pb' : '') + '">' + x + '</div>'; }).join('') + '</div>' : '') +
+    (v.bk ? bkCoverHtml('back', back, 'bk-b bk-last') : '') + '</div>';
+  $('#print-area').innerHTML = h;
+  document.body.classList.add('printing');
+  await Promise.all([].map.call($('#print-area').querySelectorAll('img'), function (im) { return im.decode ? im.decode().catch(function () { }) : Promise.resolve(); }));
+  setTimeout(function () {
+    try { window.print(); } catch (e) { }
+    setTimeout(function () { document.addEventListener('pointerdown', function off() { document.body.classList.remove('printing'); document.removeEventListener('pointerdown', off); }); }, 800);
+  }, 150);
+}
+
 function vSettings() {
   S.logoDraft = S.d.settings.logoUrl || '';
   var h = '<div class="card"><div class="row mb2" style="gap:1rem"><div id="logoprev" style="width:84px;height:84px;border-radius:50%;border:2px dashed var(--g300);display:grid;place-items:center;overflow:hidden;background:#fff"></div><div><label class="lbl">โลโก้โรงเรียน</label><div class="row"><label class="btn btn-sm" style="cursor:pointer">อัปโหลดไฟล์โลโก้<input type="file" id="logofile" accept="image/png,image/jpeg,image/webp" class="hide" onchange="pickLogo(this)"></label><button class="btn btn-sm" type="button" onclick="S.logoDraft=\'\';drawLogoPrev()">ลบโลโก้</button></div><div class="hint">ไฟล์ PNG/JPG (แนะนำภาพสี่เหลี่ยมจัตุรัส) ระบบย่อขนาดให้อัตโนมัติ แล้วกด "บันทึกการตั้งค่า"</div></div></div><div id="setform">' + formHtml(SET_FIELDS, S.d.settings) + '</div><div class="row mt2"><button class="btn btn-primary" onclick="saveSet()">บันทึกการตั้งค่า</button></div>' +
@@ -2655,6 +3085,6 @@ function resetSeasonModal() {
 /* ===================== BOOT ===================== */
 init();
 </script>
-<script>if ('serviceWorker' in navigator && location.protocol !== 'file:') window.addEventListener('load', function () { navigator.serviceWorker.register('sw.js').catch(function () {}); });</script>
+<script>if('serviceWorker' in navigator){window.addEventListener('load',function(){navigator.serviceWorker.register('sw.js').catch(function(){});});}</script>
 </body>
 </html>

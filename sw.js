@@ -1,18 +1,13 @@
-/* Service Worker: แคชตัวแอป (HTML/ไอคอน) ให้เปิดได้เร็วและเปิดหน้าแอปได้แม้ออฟไลน์
-   ข้อมูลจริงมาจาก Google Apps Script เสมอ (ข้ามโดเมน ไม่ถูกแคชที่นี่) */
-var CACHE = 'rajaprachagames-v31';
-var SHELL = ['./', 'index.html', 'config.js', 'manifest.webmanifest', 'icons/icon-192-v2.png', 'icons/icon-512-v2.png'];
-self.addEventListener('install', function (e) {
-  e.waitUntil(caches.open(CACHE).then(function (c) { return c.addAll(SHELL); }).then(function () { return self.skipWaiting(); }));
-});
+// Service worker: หน้าเว็บโหลดจากเครือข่ายก่อน (ได้ไฟล์ล่าสุดเสมอ) ถ้าออฟไลน์ใช้ที่แคชไว้
+// เปลี่ยนเลขรุ่นนี้ทุกครั้งที่อัปโหลดไฟล์ใหม่ เพื่อล้างแคชเก่า
+var VER = 'rpg48-v2';
+var FILES = ['./', 'index.html', 'config.js', 'manifest.webmanifest', 'icons/icon-192.png', 'icons/icon-512.png'];
+self.addEventListener('install', function (e) { e.waitUntil(caches.open(VER).then(function (c) { return c.addAll(FILES); }).then(function () { return self.skipWaiting(); })); });
 self.addEventListener('activate', function (e) {
-  e.waitUntil(caches.keys().then(function (ks) { return Promise.all(ks.filter(function (k) { return k !== CACHE; }).map(function (k) { return caches.delete(k); })); }).then(function () { return self.clients.claim(); }));
+  e.waitUntil(caches.keys().then(function (ks) { return Promise.all(ks.filter(function (k) { return k !== VER; }).map(function (k) { return caches.delete(k); })); }).then(function () { return self.clients.claim(); }));
 });
 self.addEventListener('fetch', function (e) {
-  var req = e.request, u = new URL(req.url);
-  if (req.method !== 'GET' || u.origin !== location.origin) return; // POST/ข้ามโดเมน (Apps Script) ไม่แตะ
-  e.respondWith(fetch(req, { cache: 'no-cache' }).then(function (r) {                      // เครือข่ายก่อน เพื่อให้เวอร์ชันใหม่ขึ้นทันที
-    if (r && r.ok) { var cp = r.clone(); caches.open(CACHE).then(function (c) { c.put(req, cp); }); }
-    return r;
-  }).catch(function () { return caches.match(req).then(function (m) { return m || caches.match('index.html'); }); }));
+  var r = e.request;
+  if (r.method !== 'GET' || new URL(r.url).origin !== location.origin) return;   // ไม่แตะคำขอไป Apps Script / ฟอนต์
+  e.respondWith(fetch(r).then(function (res) { var cp = res.clone(); caches.open(VER).then(function (c) { c.put(r, cp); }); return res; }).catch(function () { return caches.match(r).then(function (m) { return m || caches.match('index.html'); }); }));
 });
