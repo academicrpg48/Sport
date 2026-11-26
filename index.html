@@ -122,6 +122,7 @@ table.t{width:100%;border-collapse:collapse;font-size:.9rem}
 @keyframes tkmove{from{transform:translateX(0)}to{transform:translateX(-100%)}}
 @media (prefers-reduced-motion:reduce){.tick .tk-m{animation:none;padding-left:.8rem;white-space:normal}.tick .tk-i i{animation:none}}
 .notice{background:var(--y100);border:1px solid var(--y200);color:#78350F;border-radius:14px;padding:.7rem 1rem;font-weight:600;margin-bottom:1rem}
+.t.sched{table-layout:fixed;width:100%}.t.sched td,.t.sched th{overflow-wrap:anywhere;vertical-align:middle}.t.sched td:last-child{white-space:normal!important}
 .tabs{display:flex;gap:.3rem;background:#fff;border:1px solid var(--line);padding:.3rem;border-radius:14px;margin-bottom:1rem;overflow-x:auto}
 .tabs a{flex:1 1 auto;text-align:center;padding:.55rem 1rem;border-radius:11px;font-weight:700;color:var(--mut);cursor:pointer;white-space:nowrap}
 .tabs a.on{background:var(--g600);color:#fff}
@@ -1000,7 +1001,7 @@ function scheduleItems(events, matches, colors) {
       var seen = {};
       var lns = ms.slice().sort(function (a, b) { return num(a.rd) - num(b.rd); }).map(function (m) { return { lane: m.rd, color: m.colorA }; });
       var lsub = lns.map(function (x) { return 'ช่อง ' + x.lane + ' ' + String((cm2[x.color] || {}).name || '').replace(/^สี/, ''); }).join(' · ');
-      ms.forEach(function (m) { if (seen[m.round]) return; seen[m.round] = 1; out.push({ id: m.id, ev: e, lanes: lns, sub: lsub, label: base + ' · ' + m.round, category: e.category, date: m.date || e.date || '', time: m.time || e.time || '', endTime: m.time ? (m.endTime || '') : (e.endTime || ''), venue: m.venue || e.venue || '', status: st(m) }); });
+      ms.forEach(function (m) { if (seen[m.round]) return; seen[m.round] = 1; out.push({ id: m.id, ev: e, lanes: lns, sub: lsub, cols: lns.map(function (x) { return x.color; }), label: base + ' · ' + m.round, category: e.category, date: m.date || e.date || '', time: m.time || e.time || '', endTime: m.time ? (m.endTime || '') : (e.endTime || ''), venue: m.venue || e.venue || '', status: st(m) }); });
       return;
     }
     var byId = cmap(ms);
@@ -1011,7 +1012,7 @@ function scheduleItems(events, matches, colors) {
         res = nm(m, 'A') + ' ' + m.scoreA + ' - ' + m.scoreB + ' ' + nm(m, 'B');
         if (m.winner === 'draw') res += ' (เสมอ)'; else if (m.scoreA === m.scoreB && cm2[m.winner]) res += ' (' + cm2[m.winner].name + 'ชนะ)';
       }
-      out.push({ id: m.id, ev: e, base: base, pair: nm(m, 'A') + ' พบ ' + nm(m, 'B'), result: res, label: base + ' — ' + nm(m, 'A') + ' พบ ' + nm(m, 'B'), sub: 'นัดที่ ' + m.no + ' · ' + m.round, category: e.category, date: m.date || e.date || '', time: m.time || e.time || '', endTime: m.time ? (m.endTime || '') : (e.endTime || ''), venue: m.venue || e.venue || '', status: st(m) });
+      out.push({ id: m.id, ev: e, cols: [m.colorA, m.colorB], base: base, pair: nm(m, 'A') + ' พบ ' + nm(m, 'B'), result: res, label: base + ' — ' + nm(m, 'A') + ' พบ ' + nm(m, 'B'), sub: 'นัดที่ ' + m.no + ' · ' + m.round, category: e.category, date: m.date || e.date || '', time: m.time || e.time || '', endTime: m.time ? (m.endTime || '') : (e.endTime || ''), venue: m.venue || e.venue || '', status: st(m) });
     });
   });
   out.forEach(function (it) { it.run = isLaneEv(it.ev); });
@@ -1103,7 +1104,7 @@ async function init() {
 var TITLES = { dashboard: 'ภาพรวมระบบ', scoreboard: 'คะแนนรวมและเหรียญ', results: 'บันทึกผลการแข่งขัน', register: 'ลงทะเบียนนักกีฬา', events: 'รายการแข่งขัน', fixtures: 'จับคู่และตารางแข่ง', certs: 'เกียรติบัตร', news: 'ข่าวประชาสัมพันธ์', booklet: 'สูจิบัตร', seasons: 'ปีการศึกษา', schedule: 'กำหนดการแข่งขัน', students: 'รายชื่อนักเรียน', colors: 'สีและคณะสี', users: 'ผู้ใช้งานระบบ', settings: 'ตั้งค่าระบบ' };
 function navItems() {
   var a = [['dashboard', 'home'], ['scoreboard', 'trophy'], ['results', 'flag'], ['register', 'check'], ['events', 'list'], ['fixtures', 'bracket'], ['schedule', 'cal'], ['students', 'users'], ['colors', 'flag']];
-  if (S.user.role === 'colorHead') a = a.filter(function (i) { return ['results', 'fixtures', 'colors'].indexOf(i[0]) === -1; });
+  if (S.user.role === 'colorHead') a = a.filter(function (i) { return ['results', 'fixtures', 'colors', 'events'].indexOf(i[0]) === -1; });
   if (S.user.role === 'admin') a.push(['users', 'key'], ['seasons', 'cal']);
   if (isStaff()) a.push(['certs', 'award']);
   if (isStaff()) a.push(['booklet', 'list']);
@@ -1212,14 +1213,51 @@ function printStandings() {
 }
 
 /* ===================== SCHEDULE ===================== */
+/** ผลการแข่งขันในตารางกำหนดการ: ผลคู่ที่บันทึกแล้ว หรืออันดับของรายการที่ประกาศผลแล้ว (cid = แสดงเฉพาะอันดับของสีนั้น) */
+function schedResult(e, cid) {
+  if (e.result) return e.result;
+  if (!e.ev || e.ev.status !== 'finished' || (e.pair && !e.lanes)) return '';
+  if (e.id && String(e.id).indexOf('#') > -1) return '';
+  var rs = (S.d.results || []).filter(function (r) { return r.eventId === e.ev.id && r.colorId; }).sort(function (a, b) { return num(a.rank) - num(b.rank); });
+  var seen = {}, out = [];
+  rs.forEach(function (r) { if (seen[r.colorId]) return; seen[r.colorId] = 1; out.push({ rank: r.rank, color: r.colorId }); });
+  if (cid) { var m = out.filter(function (x) { return x.color === cid; })[0]; return m ? 'อันดับที่ ' + m.rank : ''; }
+  return out.map(function (x) { return x.rank + ' ' + String((S.cm[x.color] || {}).name || '').replace(/^สี/, ''); }).join(' · ');
+}
 function vSchedule() {
+  var v = vs('schedule'), head = S.user.role === 'colorHead', cols = S.d.colors || [];
+  if (!v.tab) v.tab = 'all';
+  if (head) v.colorId = S.user.colorId;
+  else if (!v.colorId || !S.cm[v.colorId]) v.colorId = cols.length ? cols[0].id : '';
+  var tabs = '<div class="tabs"><a class="' + (v.tab === 'all' ? 'on' : '') + '" onclick="vs(\'schedule\').tab=\'all\';render()">กำหนดการแข่งขันทั้งหมด</a><a class="' + (v.tab === 'color' ? 'on' : '') + '" onclick="vs(\'schedule\').tab=\'color\';render()">กำหนดการแข่งขันของคณะสี</a></div>';
+  return tabs + (v.tab === 'color' ? vScheduleColor(v, head) : vScheduleAll());
+}
+/** กำหนดการเฉพาะคณะสีที่เลือก (หัวหน้าสีเห็นเฉพาะสีของตน) */
+function vScheduleColor(v, head) {
+  var evs = S.d.events, cid = v.colorId, c = S.cm[cid];
+  if (!evs.length || !c) return '<div class="card empty">ยังไม่มีข้อมูล</div>';
+  var sel = head ? '<div class="row mb2"><span class="chip">' + esc(c.name) + '</span></div>' :
+    '<div class="row mb2" style="gap:.4rem;flex-wrap:wrap">' + S.d.colors.map(function (x) { return '<button class="btn btn-sm' + (x.id === cid ? ' btn-primary' : '') + '" onclick="vs(\'schedule\').colorId=\'' + x.id + '\';render()">' + esc(x.name) + '</button>'; }).join('') + '</div>';
+  var items = scheduleItems(evs, S.d.matches || [], S.d.colors).filter(function (e) { return (e.cols || []).indexOf(cid) > -1; }).map(function (e) {
+    var o = Object.assign({}, e);
+    if (e.lanes) { var ln = e.lanes.filter(function (x) { return x.color === cid; })[0]; o.pair = ln ? 'ช่องวิ่ง ' + ln.lane : ''; o.base = e.label; }
+    return o;
+  });
+  if (!items.length) return sel + '<div class="card empty">' + esc(c.name) + ' ยังไม่มีรายการที่จับคู่แล้ว</div>';
+  var sg = scheduleGroups(items, null, S.d.colors);
+  return sel + '<div class="mut mb2">กำหนดการแข่งขันของ' + esc(c.name) + ' (เฉพาะรายการที่จับคู่แล้ว)</div>' + sg.keys.map(function (k) {
+    return '<div class="card mb2"><h3 class="mb1">' + (k ? fmtDate(k, true) : 'ยังไม่กำหนดวัน-เวลา') + '</h3><div class="tw"><table class="t sched"><colgroup><col style="width:10%"><col style="width:22%"><col style="width:17%"><col style="width:12%"><col style="width:9%"><col style="width:16%"><col style="width:14%"></colgroup><thead><tr><th>เวลา</th><th>รายการ</th><th>คู่แข่ง</th><th>สถานที่</th><th>สถานะ</th><th>ผลการแข่งขัน</th><th></th></tr></thead><tbody>' +
+      sg.g[k].map(function (e) { return '<tr><td>' + esc(tr2(e.time, e.endTime)) + '</td><td><b>' + esc(e.base || e.label) + '</b><div class="xs mut">' + esc(e.sub || e.category) + '</div></td><td>' + esc(e.pair || '') + '</td><td>' + esc(e.venue || '-') + '</td><td>' + statusChip(e.status) + '</td><td>' + esc(schedResult(e, cid)) + '</td><td></td></tr>'; }).join('') + '</tbody></table></div></div>';
+  }).join('');
+}
+function vScheduleAll() {
   var evs = S.d.events;
   if (!evs.length) return '<div class="card empty">ยังไม่มีรายการแข่งขัน</div>';
   var sg = scheduleGroups(evs, S.d.matches, S.d.colors);
-  return '<div class="row sp mb2"><span class="mut">' + (isStaff() ? 'กดปุ่ม "แก้ไข" เพื่อกำหนดวัน เวลา และสถานที่ของแต่ละรายการ — รายการที่จับคู่แล้วกด "เวลาแต่ละคู่" เพื่อกำหนดเวลาแยกตามคู่' : 'กำหนดการแข่งขันทั้งหมด') + '</span><button class="btn btn-sun" onclick="printSchedule()">พิมพ์กำหนดการ</button> <button class="btn btn-sm" onclick="downloadScheduleWord()">ดาวน์โหลด Word</button></div>' +
+  return '<div class="row sp mb2"><span class="mut">' + (isStaff() ? 'กดปุ่ม "แก้ไข" เพื่อกำหนดวัน เวลา และสถานที่ของแต่ละรายการ — รายการที่จับคู่แล้วกด "เวลาแต่ละคู่" เพื่อกำหนดเวลาแยกตามคู่' : 'กำหนดการแข่งขันทั้งหมด') + '</span>' + (S.user.role === 'colorHead' ? '' : '<button class="btn btn-sun" onclick="printSchedule()">พิมพ์กำหนดการ</button> <button class="btn btn-sm" onclick="downloadScheduleWord()">ดาวน์โหลด Word</button>') + '</div>' +
     sg.keys.map(function (k) {
-      return '<div class="card mb2"><h3 class="mb1">' + (k ? fmtDate(k, true) : 'ยังไม่กำหนดวัน-เวลา') + '</h3><div class="tw"><table class="t"><thead><tr><th>เวลา</th><th>รายการ</th><th>สถานที่</th><th>สถานะ</th><th></th></tr></thead><tbody>' +
-        sg.g[k].map(function (e) { var hasM = !!(e.ev && (S.d.matches || []).some(function (m) { return m.eventId === e.ev.id; })); return '<tr><td>' + esc(tr2(e.time, e.endTime)) + '</td><td><b>' + esc(e.label) + '</b><div class="xs mut">' + esc(e.sub || e.category) + '</div></td><td>' + esc(e.venue || '-') + '</td><td>' + statusChip(e.status) + '</td><td class="r" style="white-space:nowrap">' + (isStaff() ? (hasM ? '<button class="btn btn-sm" onclick="matchTimesModal(\'' + e.ev.id + '\')">เวลาแต่ละคู่</button> ' : '') + '<button class="btn btn-sm" onclick="eventModal(\'' + e.ev.id + '\')">แก้ไข</button>' : '') + '</td></tr>'; }).join('') + '</tbody></table></div></div>';
+      return '<div class="card mb2"><h3 class="mb1">' + (k ? fmtDate(k, true) : 'ยังไม่กำหนดวัน-เวลา') + '</h3><div class="tw"><table class="t sched"><colgroup><col style="width:10%"><col style="width:22%"><col style="width:17%"><col style="width:12%"><col style="width:9%"><col style="width:16%"><col style="width:14%"></colgroup><thead><tr><th>เวลา</th><th>รายการ</th><th>คู่แข่ง</th><th>สถานที่</th><th>สถานะ</th><th>ผลการแข่งขัน</th><th></th></tr></thead><tbody>' +
+        sg.g[k].map(function (e) { var hasM = !!(e.ev && (S.d.matches || []).some(function (m) { return m.eventId === e.ev.id; })); return '<tr><td>' + esc(tr2(e.time, e.endTime)) + '</td><td><b>' + esc(e.base || e.label) + '</b><div class="xs mut">' + esc(e.sub || e.category) + '</div></td><td>' + esc(e.pair || '') + '</td><td>' + esc(e.venue || '-') + '</td><td>' + statusChip(e.status) + '</td><td>' + esc(schedResult(e)) + '</td><td class="r" style="white-space:nowrap">' + (isStaff() ? (hasM ? '<button class="btn btn-sm" onclick="matchTimesModal(\'' + e.ev.id + '\')">เวลาแต่ละคู่</button> ' : '') + '<button class="btn btn-sm" onclick="eventModal(\'' + e.ev.id + '\')">แก้ไข</button>' : '') + '</td></tr>'; }).join('') + '</tbody></table></div></div>';
     }).join('');
 }
 function scheduleHtml() {
