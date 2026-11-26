@@ -1,6 +1,6 @@
 // Service worker: หน้าเว็บโหลดจากเครือข่ายก่อน (ได้ไฟล์ล่าสุดเสมอ) ถ้าออฟไลน์ใช้ที่แคชไว้
 // เปลี่ยนเลขรุ่นนี้ทุกครั้งที่อัปโหลดไฟล์ใหม่ เพื่อล้างแคชเก่า
-var VER = 'rpg48-v32';
+var VER = 'rpg48-v43';
 var FILES = ['./', 'index.html', 'config.js', 'manifest.webmanifest', 'icons/icon-192.png', 'icons/icon-512.png'];
 self.addEventListener('install', function (e) { e.waitUntil(caches.open(VER).then(function (c) { return c.addAll(FILES); }).then(function () { return self.skipWaiting(); })); });
 self.addEventListener('activate', function (e) {

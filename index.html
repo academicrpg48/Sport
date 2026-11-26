@@ -225,6 +225,9 @@ body{background-image:radial-gradient(at 0% 0%,rgba(167,243,208,.45) 0,transpare
 @keyframes barmove{to{background-position:20px 0}}
 .pts{font-size:2.3rem;font-weight:800;font-style:italic;letter-spacing:-.01em;background:linear-gradient(180deg,#065F46,#064E3B);-webkit-background-clip:text;background-clip:text;color:transparent}
 .sb-row:first-child .pts{background:linear-gradient(180deg,#D97706,#92400E);-webkit-background-clip:text;background-clip:text}
+.sb-row:first-child:not(.lead){background:none;box-shadow:none}.sb-row:first-child:not(.lead) .pts{background:linear-gradient(180deg,#065F46,#064E3B);-webkit-background-clip:text;background-clip:text}
+/* อันดับ 1 ที่มีคะแนน = พื้นเหลืองทอง; ยังไม่มีคะแนน = พื้นขาวตามปกติ */
+body .sb-row.lead{background:linear-gradient(90deg,rgba(253,224,71,.28),rgba(253,224,71,0) 70%);box-shadow:inset 0 0 0 1px rgba(251,191,36,.35)}body .sb-row.lead .pts{background:linear-gradient(180deg,#D97706,#92400E);-webkit-background-clip:text;background-clip:text}
 .prog{height:12px;box-shadow:inset 0 1px 3px rgba(0,0,0,.1)}
 .prog i{background:linear-gradient(90deg,#10B981,#FBBF24 70%,#F97316)}
 .stat{border-radius:18px;background:linear-gradient(160deg,#fff,#F0FDF4);box-shadow:0 10px 24px -14px rgba(5,95,70,.35)}
@@ -376,6 +379,7 @@ table.t tbody tr:hover{background:#F3FCF7}
 .nws .nb{min-width:0;flex:1}.nws h4{margin:.35rem 0 .15rem;font-size:1.06rem;line-height:1.3}.nws .ns{color:var(--mut);font-size:.92rem;line-height:1.4}
 .nsch{margin-top:.6rem;border-top:1px dashed var(--line);padding-top:.5rem}.nsch h5{margin:.5rem 0 .2rem;font-size:.9rem;color:var(--g900)}
 .nsch table{width:100%;border-collapse:collapse;font-size:.85rem}.nsch td{padding:.25rem .4rem;border-bottom:1px solid var(--line);vertical-align:top}.nsch td:first-child{white-space:nowrap;width:1%;color:var(--mut)}.nsch td:last-child{color:var(--mut);text-align:right}
+.overlay.bk-full{padding:0!important}.overlay.bk-full .mcard{width:100vw!important;max-width:100vw!important;height:100vh!important;max-height:100vh!important;border-radius:0!important;display:flex;flex-direction:column}.overlay.bk-full .mbody{max-height:none!important;flex:1;overflow:auto}.overlay.bk-full .bk-pg{max-width:min(100%,900px)}
 .bk-pg{background:#fff;border:1px solid var(--line);border-radius:6px;box-shadow:0 6px 18px -10px rgba(0,0,0,.4);margin:0 auto .4rem;max-width:640px;overflow:hidden}
 .bk-pg img{display:block;width:100%;height:auto}.bk-pg.doc{padding:1rem 1.1rem}.bk-pg h3{margin:0 0 .5rem;text-align:center}.bk-pg h5{margin:.7rem 0 .2rem}
 .bk-pg .bk-view{position:relative;width:100%;aspect-ratio:210/297;overflow:hidden}.bk-pg .bk-view>.bk-cv{position:absolute;left:0;top:0;transform-origin:0 0}
@@ -679,7 +683,7 @@ window.addEventListener('afterprint', function () { document.body.classList.remo
 function standingsHtml(st) {
   var max = Math.max.apply(null, [1].concat(st.list.map(function (r) { return r.total; })));
   return st.list.map(function (r) {
-    return '<div class="sb-row"><div class="rk ' + (r.rank <= 3 ? 'r' + r.rank : '') + '">' + r.rank + '</div><div style="min-width:0"><div class="row" style="gap:.4rem">' + colorDot(r) + '<b style="font-size:1.05rem">' + esc(r.name) + '</b></div>' +
+    return '<div class="sb-row' + (r.rank === 1 && r.total > 0 ? ' lead' : '') + '"><div class="rk ' + (r.rank <= 3 ? 'r' + r.rank : '') + '">' + r.rank + '</div><div style="min-width:0"><div class="row" style="gap:.4rem">' + colorDot(r) + '<b style="font-size:1.05rem">' + esc(r.name) + '</b></div>' +
       '<div class="bar"><i style="width:' + Math.max(2, Math.round(Math.max(0, r.total) / max * 100)) + '%;background:' + esc(r.hex) + '"></i></div>' +
       '<div class="medals"><span><i class="md g"></i>' + r.gold + '</span><span><i class="md s"></i>' + r.silver + '</span><span><i class="md b"></i>' + r.bronze + '</span>' +
       (r.adjust ? '<span class="mut">คะแนนพิเศษ ' + (r.adjust > 0 ? '+' : '') + fmtNum(r.adjust) + '</span>' : '') + '</div></div>' +
@@ -695,6 +699,14 @@ function groupHtml(g, title, sub, mode) {
   if (!g || !g.events.length) return '';
   if (g.hidden) return '<div class="card mt2"><div class="row sp"><div><h3>' + title + '</h3><div class="xs mut">' + sub + '</div></div><span class="chip warn">ยังไม่ประกาศผล</span></div><div class="empty xs">คณะกรรมการจะประกาศผลการประกวดแยกจากคะแนนรวมกีฬา</div></div>';
   var fin = g.events.filter(function (e) { return e.finished; }), body;
+  var asSports = mode === 'rows';   // คะแนนรวมกรีฑา: แสดงแถบความคืบหน้าและอันดับสีเหมือนคะแนนรวมกีฬา
+  if (asSports) {
+    var sl = g.list.map(function (r) { return Object.assign({}, r, { total: r.points }); });
+    body = progressHtml({ finishedCount: g.finishedCount, totalEvents: g.totalEvents }) + standingsHtml({ list: sl }) +
+      (fin.length ? '<details class="mt1"><summary class="sm" style="cursor:pointer;font-weight:700;color:var(--g800)">ดูคะแนนแยกตามรายการ (' + fin.length + ' รายการ)</summary><div class="tw mt1" style="max-height:360px"><table class="t"><thead><tr><th>รายการ</th>' + g.list.map(function (r) { return '<th class="num">' + colorDot(r) + ' ' + esc(r.name) + '</th>'; }).join('') + '</tr></thead><tbody>' +
+        fin.map(function (e) { return '<tr><td>' + esc(e.label) + '</td>' + g.list.map(function (r) { return '<td class="num">' + (r.byEvent[e.id] ? fmtNum(r.byEvent[e.id]) : '-') + '</td>'; }).join('') + '</tr>'; }).join('') + '</tbody></table></div></details>' : '');
+    return '<div class="card mt2"><div class="mb1"><h3>' + title + '</h3><div class="xs mut">' + sub + '</div></div>' + body + '</div>';
+  }
   if (!fin.length) body = '<div class="empty xs">ยังไม่มีการประกาศผลในส่วนนี้</div>';
   else if (mode === 'cols') {
     body = '<div class="tw"><table class="t"><thead><tr><th class="num" style="width:60px">อันดับ</th><th>สี</th>' + fin.map(function (e) { return '<th class="num">' + esc(e.label) + '</th>'; }).join('') + '<th class="num">รวม</th></tr></thead><tbody>' +
@@ -713,9 +725,12 @@ function oneContestHtml(c) {
   if (staffView) String((S.d.settings || {}).contestShown || '').split(',').forEach(function (x) { if (x) shown[x] = 1; });
   var chip = c.hidden ? '<span class="chip warn">ยังไม่ประกาศผล</span>' : (c.finished ? '<span class="chip ok">ประกาศผลแล้ว</span>' : '<span class="chip">ยังไม่แข่ง</span>');
   if (staffView && c.finished && !shown[c.id]) chip += ' <span class="chip warn">ยังไม่เปิดเผยบนหน้าสาธารณะ</span>';
-  var body = c.hidden ? '<div class="empty xs">คณะกรรมการจะประกาศผลรายการนี้ในโอกาสต่อไป</div>' : (!c.finished ? '<div class="empty xs">ยังไม่มีการประกาศผลรายการนี้</div>' :
-    '<div class="tw"><table class="t"><thead><tr><th class="num" style="width:70px">อันดับ</th><th>สี</th><th class="num">คะแนน</th></tr></thead><tbody>' +
-    c.list.map(function (r) { return '<tr><td class="num"><b>' + r.rank + '</b></td><td>' + colorChip(r) + '</td><td class="num"><b>' + fmtNum(r.points) + '</b></td></tr>'; }).join('') + '</tbody></table></div>');
+  // แสดงแบบเดียวกับการ์ดคะแนนรวมกีฬา/กรีฑา (แถบความคืบหน้า + อันดับสี + เหรียญ)
+  var done = !c.hidden && c.finished, cols = (staffView ? S.d.colors : (S.pub && S.pub.colors)) || [];
+  var src = done ? c.list : cols.map(function (x) { return { name: x.name, hex: x.hex, rank: 1, points: 0 }; });
+  var sl = src.map(function (r) { return Object.assign({ gold: 0, silver: 0, bronze: 0 }, r, { total: num(r.points) }); });
+  var body = progressHtml({ finishedCount: done ? 1 : 0, totalEvents: 1 }) + standingsHtml({ list: sl }) +
+    (done ? '' : '<div class="empty xs">' + (c.hidden ? 'คณะกรรมการจะประกาศผลรายการนี้ในโอกาสต่อไป' : 'ยังไม่มีการประกาศผลรายการนี้') + '</div>');
   return '<div class="card mt2"><div class="row sp mb1"><h3>' + esc(c.label) + '</h3><div class="row">' + chip + '</div></div>' + body + '</div>';
 }
 function contestHtml(st) {
@@ -875,6 +890,24 @@ function newsSchedHtml(admin) {
 }
 /** อ่านสูจิบัตรแบบออนไลน์: ปกหน้า → กำหนดการพิธีเปิด → กำหนดการแข่งขัน → ปกหลัง */
 var BOOK_PUB = {};
+/** ขยายหน้าต่างสูจิบัตรเต็มจอ (สลับเข้า/ออก) */
+function bkFull(c) {
+  var on = c.el.classList.toggle('bk-full');
+  try { if (on && c.el.requestFullscreen) c.el.requestFullscreen().catch(function () { }); else if (!on && document.fullscreenElement) document.exitFullscreen(); } catch (e) { }
+  var b = $$('.mfoot button', c.el)[0]; if (b) b.textContent = on ? 'ย่อกลับ' : 'ขยายใหญ่';
+  setTimeout(function () { if (window.bkFit) window.bkFit(); }, 60); setTimeout(function () { if (window.bkFit) window.bkFit(); }, 350);
+}
+/** ดาวน์โหลดสูจิบัตรเป็น PDF: เปิดหน้าต่างพิมพ์ แล้วเลือก "บันทึกเป็น PDF" */
+async function bkDownload(pr) {
+  $('#print-area').innerHTML = '<div class="bk">' + pr.join('') + '</div>';
+  document.body.classList.add('printing');
+  toast('เลือกเครื่องพิมพ์เป็น "บันทึกเป็น PDF" เพื่อดาวน์โหลดไฟล์');
+  await Promise.all([].map.call($('#print-area').querySelectorAll('img'), function (im) { return im.decode ? im.decode().catch(function () { }) : Promise.resolve(); }));
+  setTimeout(function () {
+    try { window.print(); } catch (e) { }
+    setTimeout(function () { document.addEventListener('pointerdown', function off() { document.body.classList.remove('printing'); document.removeEventListener('pointerdown', off); }); }, 800);
+  }, 150);
+}
 async function openBooklet() {
   var admin = !!(S.sid && S.d), st = settingsNow(), data;
   try {
@@ -886,22 +919,25 @@ async function openBooklet() {
     }
   } catch (e) { toast(cleanMsg(e), 'err'); return; }
   var evs = admin ? S.d.events : (S.pub.events || []), cols = admin ? S.d.colors : (S.pub.colors || []);
-  var pg = [], cap = [];
+  var pg = [], cap = [], pr = [];
+  var pimg = function (src) { return '<div class="bk-cv bk-pdf"><img class="bk-img" src="' + esc(src) + '" alt=""></div>'; };
   var img = function (src) { return '<div class="bk-pg"><img src="' + esc(src) + '" alt=""></div>'; };
-  pg.push(data.front ? img(data.front) : '<div class="bk-pg"><div class="bk-view">' + bkDefCover('front') + '</div></div>'); cap.push('ปกหน้า');
-  (data.opening || []).forEach(function (x, i) { pg.push(img(x)); cap.push('กำหนดการพิธีเปิด หน้า ' + (i + 1)); });
-  if ((data.schedule || []).length) { data.schedule.forEach(function (x, i) { pg.push(img(x)); cap.push('กำหนดการแข่งขัน หน้า ' + (i + 1)); }); }
+  pg.push(data.front ? img(data.front) : '<div class="bk-pg"><div class="bk-view">' + bkDefCover('front') + '</div></div>'); cap.push('ปกหน้า'); pr.push(bkCoverHtml('front', data.front));
+  (data.opening || []).forEach(function (x, i) { pg.push(img(x)); pr.push(pimg(x)); cap.push('กำหนดการพิธีเปิด หน้า ' + (i + 1)); });
+  if ((data.schedule || []).length) { data.schedule.forEach(function (x, i) { pg.push(img(x)); pr.push(pimg(x)); cap.push('กำหนดการแข่งขัน หน้า ' + (i + 1)); }); }
   else if (evs.length) {
     var sg = scheduleGroups(evs, admin ? S.d.matches : (S.pub.matches || []), cols);
-    pg.push('<div class="bk-pg doc"><h3>กำหนดการแข่งขัน</h3>' + sg.keys.map(function (k) {
+    var sdoc = '<h3>กำหนดการแข่งขัน</h3>' + sg.keys.map(function (k) {
       return '<h5>' + (k ? fmtDate(k, true) : 'ยังไม่กำหนดวัน-เวลา') + '</h5><div class="tw"><table class="t"><thead><tr><th>เวลา</th><th>รายการ</th><th>สถานที่</th></tr></thead><tbody>' +
         sg.g[k].map(function (e) { return '<tr><td>' + esc(tr2(e.time, e.endTime)) + '</td><td>' + esc(e.label || evLabel(e)) + '</td><td>' + esc(e.venue || '-') + '</td></tr>'; }).join('') + '</tbody></table></div>';
-    }).join('') + '</div>'); cap.push('กำหนดการแข่งขัน');
+    }).join('');
+    pg.push('<div class="bk-pg doc">' + sdoc + '</div>'); pr.push('<div class="pr">' + sdoc + '</div>'); cap.push('กำหนดการแข่งขัน');
   }
-  pg.push(data.back ? img(data.back) : '<div class="bk-pg"><div class="bk-view">' + bkDefCover('back') + '</div></div>'); cap.push('ปกหลัง');
+  pg.push(data.back ? img(data.back) : '<div class="bk-pg"><div class="bk-view">' + bkDefCover('back') + '</div></div>'); cap.push('ปกหลัง'); pr.push(bkCoverHtml('back', data.back, 'bk-b bk-last'));
   var ctl = modal({ title: 'สูจิบัตร ' + st.eventName + ' ปีการศึกษา ' + st.academicYear, wide: true,
     body: pg.map(function (x, i) { return x + '<div class="bk-cap">' + esc(cap[i]) + ' · หน้า ' + (i + 1) + ' / ' + pg.length + '</div>'; }).join(''),
-    actions: [{ label: 'ปิด', close: true }] });
+    actions: [{ label: 'ขยายใหญ่', fn: function (c) { bkFull(c); return false; } }, { label: 'ดาวน์โหลด PDF', cls: 'btn-primary', fn: function () { bkDownload(pr); return false; } }, { label: 'ปิด', close: true }] });
+  window.bkFit = function () { $$('.bk-view', ctl.el).forEach(function (v) { var c = v.firstElementChild; if (c) c.style.transform = 'scale(' + (v.clientWidth / 793.7) + ')'; }); };
   var fit = function () { $$('.bk-view', ctl.el).forEach(function (v) { var c = v.firstElementChild; if (c) c.style.transform = 'scale(' + (v.clientWidth / 793.7) + ')'; }); };
   setTimeout(fit, 30); setTimeout(fit, 300);
 }
@@ -1148,11 +1184,12 @@ function vDashboard() {
   var h = '<div class="grid g4">' + tiles.map(function (t) { return '<div class="stat"><b>' + fmtNum(t[0]) + '</b><span>' + t[1] + '</span></div>'; }).join('') + '</div>';
   if (d.settings.registrationOpen !== 'true') h += '<div class="notice mt2">ขณะนี้ปิดรับการลงทะเบียนนักกีฬาแล้ว (เฉพาะคณะกรรมการ/ผู้ดูแลระบบที่แก้ไขได้)</div>';
   h += '<div class="grid g2 mt2"><div class="card"><div class="row sp mb1"><h3>อันดับคะแนนรวมกีฬา</h3><a class="sm" style="cursor:pointer" onclick="go(\'scoreboard\')">ดูรายละเอียด</a></div><div class="mb1">' + progressHtml(st) + '</div>' + (st.list.length ? standingsHtml(st) : '<div class="empty">ยังไม่มีสี</div>') + '</div>';
-  var up = evs.filter(function (e) { return e.status !== 'finished'; }).sort(function (a, b) {
+  // ใช้วัน-เวลาของแต่ละคู่/ช่วง (กำหนดแยกตามคู่ได้) ไม่ใช่เฉพาะวันที่ระดับรายการ
+  var up = scheduleItems(evs, d.matches || [], d.colors).filter(function (e) { return e.status !== 'finished'; }).sort(function (a, b) {
     var ka = (a.date || '9999') + (a.time || '99:99'), kb = (b.date || '9999') + (b.time || '99:99'); return ka < kb ? -1 : ka > kb ? 1 : 0;
   }).slice(0, 8);
   h += '<div class="card"><div class="row sp mb1"><h3>รายการที่กำลังจะถึง</h3><a class="sm" style="cursor:pointer" onclick="go(\'schedule\')">กำหนดการทั้งหมด</a></div>' +
-    (up.length ? up.map(function (e) { return '<div class="row sp" style="padding:.45rem 0;border-top:1px solid #EEF2F6"><div><b>' + esc(evLabel(e)) + '</b><div class="xs mut">' + (e.date ? fmtDate(e.date) + ' ' : 'ยังไม่กำหนดวัน ') + esc(e.time ? tr2(e.time, e.endTime) : '') + (e.venue ? ' · ' + esc(e.venue) : '') + '</div></div>' + statusChip(e.status) + '</div>'; }).join('') : '<div class="empty">ไม่มีรายการค้าง</div>') + '</div></div>';
+    (up.length ? up.map(function (e) { return '<div class="row sp" style="padding:.45rem 0;border-top:1px solid #EEF2F6"><div><b>' + esc(e.label || evLabel(e)) + '</b><div class="xs mut">' + (e.date ? fmtDate(e.date) + ' ' : 'ยังไม่กำหนดวัน ') + esc(e.time ? tr2(e.time, e.endTime) : '') + (e.venue ? ' · ' + esc(e.venue) : '') + '</div></div>' + statusChip(e.status) + '</div>'; }).join('') : '<div class="empty">ไม่มีรายการค้าง</div>') + '</div></div>';
   return h;
 }
 
@@ -1989,6 +2026,10 @@ function matchModal(id) {
   };
   var acts = [{ label: 'ปิด', close: true }];
   if (staff && !m.srcA && !m.srcB && m.stage === 'rr') acts.push({ label: 'ลบคู่นี้', cls: 'btn-danger', fn: async function () { await act('deleteMatch', [m.id], 'ลบคู่แล้ว'); } });
+  if (staff && (fin || m.scoreA !== '' || m.scoreB !== '') && known) acts.push({ label: 'ล้างผลการแข่งขัน', cls: 'btn-danger', fn: async function () {
+    if (!(await confirmBox('ล้างผลการแข่งขัน', 'ล้างคะแนนและผลของคู่ <b>' + nm('A') + ' พบ ' + nm('B') + '</b> กลับเป็น "ยังไม่แข่ง" ?', 'ล้างผล', true))) return false;
+    await act('saveMatch', [{ id: m.id, clear: true }], 'ล้างผลการแข่งขันแล้ว');
+  } });
   if (staff && fin) acts.push({ label: 'ยกเลิกผล (เปิดแก้ไข)', fn: async function () { await act('saveMatch', [{ id: m.id, reopen: true }], 'เปิดแก้ไขคู่แล้ว'); } });
   if (!locked) {
     acts.push({ label: 'บันทึกร่าง', fn: async function () { await act('saveMatch', [collect(false)], 'บันทึกแล้ว'); } });
